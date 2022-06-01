@@ -1,2 +1,2 @@
-# react_formik_yup_multi_step_form
-react, formik, yup, multi step, form
+# react formik yup multi step form
+Tags: react, formik, yup, multi step, form, bootstrap 5
