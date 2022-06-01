@@ -1,0 +1,5 @@
+.nav1{background-color:#111111; padding:19px 0;}
+.nav2 a{margin-left:30px; list-style:none; text-decoration:none;}
+.nav2 a{color:#fff;}
+.nav2 a.active{color:#eaa636;}
+.error{color:#dc3545;}
