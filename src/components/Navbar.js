@@ -14,7 +14,7 @@ const Navbar = props => {
 		<div className="col-md-3"></div>
 		<div className="col-md-9">
 		<nav className="float-end nav2">
-			<NavLink to="/">Home</NavLink>
+			<NavLink to="/careers">Careers</NavLink>
 			<NavLink to="/blog">BLOG</NavLink>
 			<NavLink to="/contact">CONTACT</NavLink>
 		</nav>
