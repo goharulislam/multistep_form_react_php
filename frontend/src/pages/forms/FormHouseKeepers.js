@@ -3,9 +3,11 @@ import {useNavigate} from 'react-router-dom';
 import {Formik, Form, FieldArray} from 'formik';
 import FormikControl from './assets/FormikControl';
 import * as Yup from 'yup';
+import axios from '../../axios/index';
 
 function FormHouseKeepers(){
 const navigate = useNavigate();
+let formData = new FormData();
 const [data, setData] = useState({
 	title: '',
 	first_name: '',
@@ -79,9 +81,46 @@ const [data, setData] = useState({
 const [currentStep, setCurrentStep] = useState(0);
 const [errors, setErrors] = useState({});
 
-const makeRequest = (formData) => {
-	console.log('form submitted', formData);
-	document.getElementById("whereToPrint").innerHTML = JSON.stringify(formData, null, 4);
+function formatDate(date){
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+
+const makeRequest = (newData) => {
+//console.log('form submitted', newData);
+document.getElementById("whereToPrint").innerHTML = JSON.stringify(newData, null, 4);
+
+Object.keys(newData).forEach(fieldName => {
+	if(fieldName === 'date_birth' || fieldName === 'sia_badge_expiry' || fieldName === 'bank_statement_date'){
+		let d1 = formatDate(newData[fieldName]);
+		formData.append(fieldName, d1);
+	} else if (fieldName === 'employment_history' || fieldName === 'address_history' || fieldName === 'self_employment' || fieldName === 'gaps_employment'){
+		formData.append(fieldName, JSON.stringify(newData[fieldName]));
+	} else {
+		//console.log(fieldName, newData[fieldName]);
+		formData.append(fieldName, newData[fieldName]);
+	}
+
+});
+
+//document.getElementById("whereToPrint").innerHTML = JSON.stringify(formData, null, 4);
+/*
+	// V IMP CODE
+	for(var pair of formData.entries()){
+	console.log(pair[0]+ ', ' + pair[1]); 
+}
+*/
+
+axios.post('api_forms.php', formData);
 }
 
 const handleNextStep = (newData, final = false) => {

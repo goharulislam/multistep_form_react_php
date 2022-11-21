@@ -3,12 +3,16 @@ import {useNavigate} from 'react-router-dom';
 import {Formik, Form, FieldArray} from 'formik';
 import FormikControl from './assets/FormikControl';
 import * as Yup from 'yup';
+import axios from '../../axios/index';
 
 function FormWaiter(){
+const [currentStep, setCurrentStep] = useState(0);
+const [errors, setErrors] = useState({});
+let formData = new FormData();
 const navigate = useNavigate();
 const [data, setData] = useState({
-	first_name: '',
-	last_name: '',
+	first_name1: '',
+	last_name1: '',
 	home_address: '',
 	postal_code: '',
 	region: '',
@@ -20,9 +24,6 @@ const [data, setData] = useState({
 	date_birth: '',
 	place_birth: '',
 	country_of_birth: '',
-	sia_license: '',
-	sia_badge_no: '',
-	sia_badge_expiry: '',
 	bank_name: '',
 	bank_account_number: '',
 	sort_code: '',
@@ -104,7 +105,7 @@ const [data, setData] = useState({
 	p2_occupation: '',
 	p2_relationship: '',
 	p2_period: '',
-	eligible_uk: '',
+	eligible_uk2: '',
 	select_document: '',
 	rehab_eligible: false,
 	rehab_private: '',
@@ -150,7 +151,7 @@ const [data, setData] = useState({
 	moving: false,
 	looking: false,
 	outdoor: false,
-	enclosed: false,
+	enclosed1: false,
 	head_height: false,
 	eyesight: false,
 	lifting: false,
@@ -181,12 +182,46 @@ const [data, setData] = useState({
 	request_date2: ''
 });
 
-const [currentStep, setCurrentStep] = useState(0);
-const [errors, setErrors] = useState({});
+function formatDate(date){
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
 
-const makeRequest = (formData) => {
-	console.log('form submitted', formData);
-	document.getElementById("whereToPrint").innerHTML = JSON.stringify(formData, null, 4);
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+
+const makeRequest = (newData) => {
+//console.log('form submitted', newData);
+document.getElementById("whereToPrint").innerHTML = JSON.stringify(newData, null, 4);
+
+Object.keys(newData).forEach(fieldName => {
+	if(fieldName === 'date_birth' || fieldName === 'sia_badge_expiry' || fieldName === 'bank_statement_date'){
+		let d1 = formatDate(newData[fieldName]);
+		formData.append(fieldName, d1);
+	} else if (fieldName === 'employment_history' || fieldName === 'address_history' || fieldName === 'self_employment' || fieldName === 'gaps_employment'){
+		formData.append(fieldName, JSON.stringify(newData[fieldName]));
+	} else {
+		//console.log(fieldName, newData[fieldName]);
+		formData.append(fieldName, newData[fieldName]);
+	}
+
+});
+
+//document.getElementById("whereToPrint").innerHTML = JSON.stringify(formData, null, 4);
+/*
+	// V IMP CODE
+	for(var pair of formData.entries()){
+	console.log(pair[0]+ ', ' + pair[1]); 
+}
+*/
+
+axios.post('api_forms.php', formData);
 }
 
 const handleNextStep = (newData, final = false) => {
@@ -204,72 +239,69 @@ const handlePrevStep = (newData) => {
 };
 
 const steps = [
-				<StepOne next={handleNextStep} data={data} errors={errors} />,
-				<StepTwo next={handleNextStep} prev={handlePrevStep} data={data} errors={errors} />,
-				<StepThree next={handleNextStep} prev={handlePrevStep} data={data} errors={errors} />,
-				<StepFour next={handleNextStep} prev={handlePrevStep} data={data} errors={errors} />,
-				<StepFive next={handleNextStep} prev={handlePrevStep} data={data} errors={errors} />,
-				<StepSix next={handleNextStep} prev={handlePrevStep} data={data} errors={errors} />
-			]
+	<StepOne next={handleNextStep} data={data} errors={errors} />,
+	<StepTwo next={handleNextStep} prev={handlePrevStep} data={data} errors={errors} />,
+	<StepThree next={handleNextStep} prev={handlePrevStep} data={data} errors={errors} />,
+	<StepFour next={handleNextStep} prev={handlePrevStep} data={data} errors={errors} />,
+	<StepFive next={handleNextStep} prev={handlePrevStep} data={data} errors={errors} />,
+	<StepSix next={handleNextStep} prev={handlePrevStep} data={data} errors={errors} />
+]
 
 return(
-	<section className='steps'>
-		<h3 className='float-start'>Form: Waiter</h3>
-		<button className="btn1 btn2 float-end" onClick={() => navigate(-1)}>Back</button>
-		<div>
-			<ul className="steps-progress-bar">
-				<li className='active'></li>
-				<li className={currentStep >= 1 ? 'active' : '' }></li>
-				<li className={currentStep >= 2 ? 'active' : '' }></li>
-				<li className={currentStep >= 3 ? 'active' : '' }></li>
-				<li className={currentStep >= 4 ? 'active' : '' }></li>
-				<li className={currentStep >= 5 ? 'active' : '' }></li>
-			</ul>
-		</div>
-		<div className='clearfix'></div>
-		<p>Step {currentStep+1} out of 6</p>
-		{steps[currentStep]}
-		<pre id="whereToPrint"></pre>
-	</section>
+<section className='steps'>
+<h3 className='float-start'>Form: Waiter</h3>
+<button className="btn1 btn2 float-end" onClick={() => navigate(-1)}>Back</button>
+<div>
+	<ul className="steps-progress-bar">
+		<li className='active'></li>
+		<li className={currentStep >= 1 ? 'active' : '' }></li>
+		<li className={currentStep >= 2 ? 'active' : '' }></li>
+		<li className={currentStep >= 3 ? 'active' : '' }></li>
+		<li className={currentStep >= 4 ? 'active' : '' }></li>
+		<li className={currentStep >= 5 ? 'active' : '' }></li>
+	</ul>
+</div>
+<div className='clearfix'></div>
+	<p>Step {currentStep+1} out of 6</p>
+	{steps[currentStep]}
+	<pre id="whereToPrint"></pre>
+</section>
 );
 }
 
 const stepOneValidationSchema = Yup.object({
-	/*first_name: Yup.string().required().label('First Name'),
-	last_name: Yup.string().required().label('Last Name'),
-	gender: Yup.string().required().label('Gender'),
-	home_address: Yup.string().required().label('Home Address'),
-	postal_code: Yup.string().required().label('Postal Code'),
-	region: Yup.string().required().label('Region'),
-	city: Yup.string().required().label('City'),
-	phone: Yup.string().required().label('Phone'),
-	email: Yup.string().required().label('Email'),
+/*first_name1: Yup.string().required().label('First Name'),
+last_name1: Yup.string().required().label('Last Name'),
+gender: Yup.string().required().label('Gender'),
+home_address: Yup.string().required().label('Home Address'),
+postal_code: Yup.string().required().label('Postal Code'),
+region: Yup.string().required().label('Region'),
+city: Yup.string().required().label('City'),
+phone: Yup.string().required().label('Phone'),
+email: Yup.string().required().label('Email'),
 	
-	marital_status: Yup.string().required().label('Marital status'),
-	date_of_birth: Yup.string().required().label('Date of birth'),
-	place_of_birth: Yup.string().required().label('Palce of birth'),
-	country_of_birth: Yup.string().required().label('Country of birth'),
-	sia_license: Yup.string().required().label('SIA License'),
-	sia_badge_no: Yup.string().required().label('SIA Badge Number'),
-	sia_badge_expiry: Yup.string().required().label('SIA Badge Expiry'),
-	bank_name: Yup.string().required().label('Banke Name'),
-	bank_email: Yup.string().required().label('Bank Email'),
-	sort_code: Yup.string().required().label('Sort Code'),
-	bank_statement_date: Yup.string().required().label('Bank statement date'),
-	valid_passport: Yup.string().required().label('valid passort'),
-	uk_full_time: Yup.string().required().label('UK full time'),
-	brp: Yup.string().required().label('BRP'),
-	criminal_convictions: Yup.string().required().label('Criminal convictions'),
-	international_student: Yup.string().required().label('International student'),
-	own_vehicle: Yup.string().required().label('Own vehicle'),
-	driving_license: Yup.string().required().label('Driving license'),
-	driving_license_number: Yup.string().required().label('Driving license number'),
-	driving_endorsements: Yup.string().required().label('Driving endorsements'),
-	kin_name: Yup.string().required().label('KIN name'),
-	kin_phone: Yup.string().required().label('KIN phone'),
-	kin_email: Yup.string().required().label('KIN email'),
-	kin_address: Yup.string().required().label('KIN address'),
-	kin_relationship: Yup.string().required().label('KIN relationship'),*/
+marital_status: Yup.string().required().label('Marital status'),
+date_of_birth: Yup.string().required().label('Date of birth'),
+place_of_birth: Yup.string().required().label('Palce of birth'),
+country_of_birth: Yup.string().required().label('Country of birth'),
+bank_name: Yup.string().required().label('Banke Name'),
+bank_email: Yup.string().required().label('Bank Email'),
+sort_code: Yup.string().required().label('Sort Code'),
+bank_statement_date: Yup.string().required().label('Bank statement date'),
+valid_passport: Yup.string().required().label('valid passort'),
+uk_full_time: Yup.string().required().label('UK full time'),
+brp: Yup.string().required().label('BRP'),
+criminal_convictions: Yup.string().required().label('Criminal convictions'),
+international_student: Yup.string().required().label('International student'),
+own_vehicle: Yup.string().required().label('Own vehicle'),
+driving_license: Yup.string().required().label('Driving license'),
+driving_license_number: Yup.string().required().label('Driving license number'),
+driving_endorsements: Yup.string().required().label('Driving endorsements'),
+kin_name: Yup.string().required().label('KIN name'),
+kin_phone: Yup.string().required().label('KIN phone'),
+kin_email: Yup.string().required().label('KIN email'),
+kin_address: Yup.string().required().label('KIN address'),
+kin_relationship: Yup.string().required().label('KIN relationship'),*/
 });
 
 const StepOne = (props) => {
@@ -280,81 +312,81 @@ const handleSubmit = (values) => {
 }
 
 return(
-	<Formik initialValues={props.data} validationSchema={stepOneValidationSchema} onSubmit={handleSubmit}>
-	{formik => {
-		console.log('formik', formik)
-		return(
-	<Form>
-		<h4>Application Information</h4>
-		<div className="row">
-		<div className="col-md-4">
-			<FormikControl control='input' type='text' label='Title' name='title' placeholder='Mr.' />
-		</div>
-		<div className="col-md-4">
-			<FormikControl control='input' type='text' label='First Name' name='first_name1' placeholder='John' />
-		</div>
-		<div className="col-md-4">
-			<FormikControl control='input' type='text' label='Surname' name='last_name1' placeholder='Doe' />
-		</div>
-		<div className="col-md-6">
-			<FormikControl control='input' type='text' label='Phone' name='phone1' />
-		</div>
-		<div className="col-md-6">
-			<FormikControl control='input' type='text' label='Email' name='email1' />
-		</div>
-		<div className="col-md-10">
-			<FormikControl control='input' type='text' label='Home Address' name='home_address1' />
-		</div>
-		<div className="col-md-2">
-			<FormikControl control='input' type='text' label='Post Code' name='post_code1' />
-		</div>
-		<div className="col-md-4">
-			<FormikControl control='input' type='text' label='Work sought' name='work_sought' value='Waiter' disabled />
-		</div>
-		<div className="col-md-4">
-			<FormikControl control='input' type='text' label='Hotel assigned' name='hotel' placeholder='To be filled by Admin' />
-		</div>
-		<div className="col-md-8">
-			<FormikControl control='checkbox_toggle_switch' label='Are eligeable to work in the UK?' name='eligible_uk' />
-		</div>
-		<div className="col-md-4">
-			<FormikControl control='date' label='Permit Expiry Date' name='permit_expiry' />
-		</div>
-		<div className="col-md-8">
-			<FormikControl control='checkbox_toggle_switch' label='Do you have a Passport?' name='passport' />
-		</div>
-		<div className="col-md-6">
-			<FormikControl control='date' label='Passport Expiry Date' name='passport_expiry' />
-		</div>
-		<div className="col-md-6">
-			<FormikControl control='input' type='text' label='Bank Name' name='bank_name' />
-		</div>
-		<div className="col-md-6">
-			<FormikControl control='input' type='text' label='Sort Code' name='sort_code' />
-		</div>
-		<div className="col-md-6">
-			<FormikControl control='input' type='text' label='Account Number' name='account_number' />
-		</div>
-		<div className="col-md-6">
-			<FormikControl control='input' type='text' label='Emergency Contact Name' name='emergency_contact_name' />
-		</div>
-		<div className="col-md-6">
-			<FormikControl control='input' type='text' label='Relation with emergency contact' name='emergency_contact_relation' />
-		</div>
-		<div className="col-md-6">
-			<FormikControl control='input' type='text' label='Emergency Contact Number' name='emergency_contact_number' />
-		</div>
-		<div className="col-md-6">
-			<FormikControl control='input' type='text' label='Emergency Contact Address' name='emergency_contact_address' />
-		</div>
-		<div className="col-md-12">
-			<h4>Previous Work Reference Detail</h4>
-		</div>
-		<FieldArray name="employment_history">
-					{({ insert, remove, push }) => (
-						<div>
-							{formik.values.employment_history.length > 0 && formik.values.employment_history.map((i, index) => (
-								<div className="row" key={index}>
+<Formik initialValues={props.data} validationSchema={stepOneValidationSchema} onSubmit={handleSubmit}>
+{formik => {
+console.log('formik', formik)
+return(
+<Form>
+<h4>Application Information</h4>
+<div className="row">
+<div className="col-md-4">
+	<FormikControl control='input' type='text' label='Title' name='title' placeholder='Mr.' />
+</div>
+<div className="col-md-4">
+	<FormikControl control='input' type='text' label='First Name' name='first_name1' placeholder='John' />
+</div>
+<div className="col-md-4">
+	<FormikControl control='input' type='text' label='Surname' name='last_name1' placeholder='Doe' />
+</div>
+<div className="col-md-6">
+	<FormikControl control='input' type='text' label='Phone' name='phone1' />
+</div>
+<div className="col-md-6">
+	<FormikControl control='input' type='text' label='Email' name='email1' />
+</div>
+<div className="col-md-10">
+	<FormikControl control='input' type='text' label='Home Address' name='home_address1' />
+</div>
+<div className="col-md-2">
+	<FormikControl control='input' type='text' label='Post Code' name='post_code1' />
+</div>
+<div className="col-md-4">
+	<FormikControl control='input' type='text' label='Work sought' name='work_sought' value='Waiter' disabled />
+</div>
+<div className="col-md-4">
+	<FormikControl control='input' type='text' label='Hotel assigned' name='hotel' placeholder='To be filled by Admin' />
+</div>
+<div className="col-md-8">
+	<FormikControl control='checkbox_toggle_switch' label='Are eligeable to work in the UK?' name='eligible_uk' />
+</div>
+<div className="col-md-4">
+	<FormikControl control='date' label='Permit Expiry Date' name='permit_expiry' />
+</div>
+<div className="col-md-8">
+	<FormikControl control='checkbox_toggle_switch' label='Do you have a Passport?' name='passport' />
+</div>
+<div className="col-md-6">
+	<FormikControl control='date' label='Passport Expiry Date' name='passport_expiry' />
+</div>
+<div className="col-md-6">
+	<FormikControl control='input' type='text' label='Bank Name' name='bank_name' />
+</div>
+<div className="col-md-6">
+	<FormikControl control='input' type='text' label='Sort Code' name='sort_code' />
+</div>
+<div className="col-md-6">
+	<FormikControl control='input' type='text' label='Account Number' name='account_number' />
+</div>
+<div className="col-md-6">
+	<FormikControl control='input' type='text' label='Emergency Contact Name' name='emergency_contact_name' />
+</div>
+<div className="col-md-6">
+	<FormikControl control='input' type='text' label='Relation with emergency contact' name='emergency_contact_relation' />
+</div>
+<div className="col-md-6">
+	<FormikControl control='input' type='text' label='Emergency Contact Number' name='emergency_contact_number' />
+</div>
+<div className="col-md-6">
+	<FormikControl control='input' type='text' label='Emergency Contact Address' name='emergency_contact_address' />
+</div>
+<div className="col-md-12">
+	<h4>Previous Work Reference Detail</h4>
+</div>
+	<FieldArray name="employment_history">
+	{({ insert, remove, push }) => (
+	<div>
+		{formik.values.employment_history.length > 0 && formik.values.employment_history.map((i, index) => (
+			<div className="row" key={index}>
 									<div className="col-md-4">
 										<FormikControl control='input' type='text' label='Company Name' name={`employment_history.${index}.company_name`} />
 									</div>
@@ -417,7 +449,7 @@ return(
 			<FormikControl control='input' type='checkbox' label='Would you have difficulty working in out-door open areas?' name='outdoor' />
 		</div>
 		<div className="col-md-12">
-			<FormikControl control='input' type='checkbox' label='Would you have difficulty working in enclosed spaces?' name='enclosed' />
+			<FormikControl control='input' type='checkbox' label='Would you have difficulty working in enclosed spaces?' name='enclosed1' />
 		</div>
 		<div className="col-md-12">
 			<FormikControl control='input' type='checkbox' label='Would you have difficulty working above head height (e.g. using ladders or maintenance platforms)?' name='head_height' />
@@ -473,7 +505,7 @@ return(
 		</div>
 
 		<div className="col-md-12">
-			<p className='float-start error' style={{display:!(formik.isValid) ? 'block' : 'none'}}>Fill required field(s) first.</p>
+			<p className='float-start error' style={{display:!(formik.isValid) ? 'block' : 'none'}}>Fill required field(s).</p>
 			<button type="submit" className="float-end btn1" disabled={!(formik.isValid)}>Next <i className='fa fa-angle-right'></i></button>
 		</div>
 	</div>{/*row*/}
@@ -685,13 +717,13 @@ const StepThree = (props) => {
 					<h4>Background information</h4>
 				</div>
 				<div className="col-md-12">
-					<FormikControl control='checkbox_toggle_switch' label='Are you currently eligible for employment in the UK?' name='eligible_uk' />
+					<FormikControl control='checkbox_toggle_switch' label='Are you currently eligible for employment in the UK?' name='eligible_uk2' />
 				</div>
-				<div className="col-md-9" style={{display: formProps.values.eligible_uk ? 'block' : 'none' }}>
+				<div className="col-md-9" style={{display: formProps.values.eligible_uk2 ? 'block' : 'none' }}>
 					<p>Please state what documentation you can provide in order to demonstrate this</p>
 					<p className='small'>(e.g. Passport/ Birth Certificate/ EU ID Card/ Visa)</p>
 				</div>
-				<div className="col-md-3" style={{display: formProps.values.eligible_uk ? 'block' : 'none' }}>
+				<div className="col-md-3" style={{display: formProps.values.eligible_uk2 ? 'block' : 'none' }}>
 					<FormikControl className='float-end' control='select' label='' name='select_document' options={dropdownDocuments} />
 				</div>
 				<div className="col-md-9">
@@ -759,30 +791,27 @@ const stepFourValidationSchema = Yup.object({
 
 const StepFour = (props) => {
 
-	const handleSubmit = (values) => {
-		props.next(values);
-	}
-
-	return(
-		<Formik initialValues={props.data} validationSchema={stepFourValidationSchema} onSubmit={handleSubmit}>
-		{(formProps) => (
-			<Form>
-				<div className="row">
-				<div className="col-md-12">
-					<p className='small'>To comply with the Health and Safety at Work Act 1974, H&D Recruitment Limited are obliged to ensure that the health and safety of our temporary workers remains our highest priority. If you are on working machines, or doing a task that could harm others if you are not medically fit, you could be held personally liable for not declaring this to the site where you are working and also to H&D Recruitment Ltd, your employing organization. Alertness and reasonable physical fitness are essential for duties which may interact with moving trains. It is, therefore, important to be accurate with your answers to this questionnaire, although trivial matters should be ignored (e.g. transient dizziness while gardening two years ago).</p>
-					<p className='strong'>When you declare NO, you are accepting a degree of responsibility for your safety, and those of others who may come to harm in your work place</p>
-				</div>
-				
-				<div className="col-md-12">
-					<button type='button' className='btn1 btn2' onClick={() => props.prev(formProps.values)}><i className='fa fa-angle-left'></i> Back</button>
-					<button type='submit' className='float-end btn1'>Next <i className='fa fa-angle-right'></i></button>
-				</div>
-
-				</div>{/*row*/}
-			</Form>
-		)}
-		</Formik>
-	);
+const handleSubmit = (values) => {
+	props.next(values);
+}
+return(
+<Formik initialValues={props.data} validationSchema={stepFourValidationSchema} onSubmit={handleSubmit}>
+{(formProps) => (
+<Form>
+<div className="row">
+<div className="col-md-12">
+	<p className='small'>To comply with the Health and Safety at Work Act 1974, H&D Recruitment Limited are obliged to ensure that the health and safety of our temporary workers remains our highest priority. If you are on working machines, or doing a task that could harm others if you are not medically fit, you could be held personally liable for not declaring this to the site where you are working and also to H&D Recruitment Ltd, your employing organization. Alertness and reasonable physical fitness are essential for duties which may interact with moving trains. It is, therefore, important to be accurate with your answers to this questionnaire, although trivial matters should be ignored (e.g. transient dizziness while gardening two years ago).</p>
+	<p className='strong'>When you declare NO, you are accepting a degree of responsibility for your safety, and those of others who may come to harm in your work place</p>
+</div>
+<div className="col-md-12">
+	<button type='button' className='btn1 btn2' onClick={() => props.prev(formProps.values)}><i className='fa fa-angle-left'></i> Back</button>
+	<button type='submit' className='float-end btn1'>Next <i className='fa fa-angle-right'></i></button>
+</div>
+</div>{/*row*/}
+</Form>
+)}
+</Formik>
+);
 }
 
 const stepFiveValidationSchema = Yup.object({
@@ -827,7 +856,7 @@ const StepFive = (props) => {
 					<h4>National Insurance Letter/NI Insurance Card</h4>
 					<div className="alert" role="alert">
 						<i className="fa fa-info-circle"></i>
-						<p>Make sure you upload your National Insurance Number not your Reference Number. The source of your NI must be from Her Majesty’s Revenue and Customs (HMRC).</p>
+						<p>Make sure you upload your National Insurance Number not your Reference Number. The source of your NI must be from Her Majesty's Revenue and Customs (HMRC).</p>
 					</div>
 				</div>
 				<div className="col-md-6">
@@ -838,7 +867,7 @@ const StepFive = (props) => {
 					<h4>Proof of Address</h4>
 					<div className="alert" role="alert">
 						<i className="fa fa-info-circle"></i>
-						<p>Proof of Address must not be older than 3 months Upload any one of them as your POA: Full Driving License, Utility Bill, Council Tax Letter, Bank Statement, Tenancy Agreement, Letter from your university confirmation your address (if you’re a student)</p>
+						<p>Proof of Address must not be older than 3 months Upload any one of them as your POA: Full Driving License, Utility Bill, Council Tax Letter, Bank Statement, Tenancy Agreement, Letter from your university confirmation your address (if you're a student)</p>
 					</div>
 				</div>
 				<div className="col-md-6">
@@ -850,9 +879,9 @@ const StepFive = (props) => {
 					<div className="alert" role="alert">
 						<i className="fa fa-info-circle"></i>
 						<ul>
-							<li>If you’re a British Citizen,</li>
-							<li>skip BRPIf you’re a Non-British and European Citizen, upload BRP (Front and Back)</li>
-							<li>If you’re a Non-British and Non-European Citizen, upload your EU Share Code</li>
+							<li>If you're a British Citizen,</li>
+							<li>skip BRPIf you're a Non-British and European Citizen, upload BRP (Front and Back)</li>
+							<li>If you're a Non-British and Non-European Citizen, upload your EU Share Code</li>
 						</ul>
 					</div>
 				</div>
@@ -861,19 +890,6 @@ const StepFive = (props) => {
 				</div>
 				<div className="col-md-6">
 					<FormikControl control='file' name='file_brp2' />
-				</div>
-				<div className="col-md-12">
-					<h4>SIA door supervisor badge</h4>
-					<div className="alert" role="alert">
-						<i className="fa fa-info-circle"></i>
-						<p>Make sure your SIA badge is VALID. All four corners must be visible</p>
-					</div>
-				</div>
-				<div className="col-md-6">
-					<FormikControl control='file' name='file_badge1' />
-				</div>
-				<div className="col-md-6">
-					<FormikControl control='file' name='file_badge2' />
 				</div>
 
 				<div className="col-md-12">
@@ -1027,7 +1043,7 @@ const StepSix = (props) => {
 					<FormikControl control='input' type='text' label='Name' name='agreement_name1' />
 				</div>
 				<div className="col-md-4">
-					<p className="strong">, have been made aware of my rights as an employee under the provisions of the Working Time Regulations 1998. I hereby voluntary agree to waive my rights under the Regulations to restrict my average working weekly hours to 48. I accept that my employer may therefore require me to work more than an average of 48 hours per week and understand that this Agreement should be read in conjunction with my Terms and Conditions of service. Furthermore, I agree to be bound by this Agreement unless I give my employer three months’ notice in writing of my intentions to revoke this Agreement.</p>
+					<p className="strong">, have been made aware of my rights as an employee under the provisions of the Working Time Regulations 1998. I hereby voluntary agree to waive my rights under the Regulations to restrict my average working weekly hours to 48. I accept that my employer may therefore require me to work more than an average of 48 hours per week and understand that this Agreement should be read in conjunction with my Terms and Conditions of service. Furthermore, I agree to be bound by this Agreement unless I give my employer three months' notice in writing of my intentions to revoke this Agreement.</p>
 				</div>
 				<div className="col-md-4">
 					<FormikControl control='input' type='text' label='Signature' name='agreement_name2' />
@@ -1073,13 +1089,6 @@ const StepSix = (props) => {
 				</div>
 				<div className="col-md-4">
 					<FormikControl control='date' label='Date of Birth' name='request_date2' />
-				</div>
-				<div className="col-md-12">
-					<h4>Please now return this request to the SARS team by POST or Scanned onto an email:</h4>
-					<p>Address:</p>
-					<p className="yellow">Room BP8003 HMRC Customs National Insurance Contribution Office BX9 1AN</p>
-					<p>Team Email Address:</p>
-					<p className="yellow">info.sars@hmrc.gsi.gov.uk</p>
 				</div>
 
 				<div className="col-md-12">

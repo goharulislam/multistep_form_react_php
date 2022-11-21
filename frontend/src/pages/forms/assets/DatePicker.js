@@ -17,7 +17,7 @@ function DatePicker(props){
                         const {value} = field;
                         
                         const formatUTC = (dateInt, addOffset = false) => {
-                            let date = (!dateInt || dateInt.length < 1) ? new Date : new Date(dateInt);
+                            let date = (!dateInt || dateInt.length < 1) ? new Date() : new Date(dateInt);
                             if (typeof dateInt === "string") {
                                 //return date;
                                 return setFieldValue(name, date);

@@ -3,9 +3,11 @@ import {useNavigate} from 'react-router-dom';
 import {Formik, Form, FieldArray} from 'formik';
 import FormikControl from './assets/FormikControl';
 import * as Yup from 'yup';
+import axios from '../../axios/index';
 
 function FormPublicAreaCleaner(){
 const navigate = useNavigate();
+let formData = new FormData();
 const [data, setData] = useState({
 	first_name: '',
 	last_name: '',
@@ -184,9 +186,46 @@ const [data, setData] = useState({
 const [currentStep, setCurrentStep] = useState(0);
 const [errors, setErrors] = useState({});
 
-const makeRequest = (formData) => {
-	console.log('form submitted', formData);
-	document.getElementById("whereToPrint").innerHTML = JSON.stringify(formData, null, 4);
+function formatDate(date){
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+
+const makeRequest = (newData) => {
+//console.log('form submitted', newData);
+document.getElementById("whereToPrint").innerHTML = JSON.stringify(newData, null, 4);
+
+Object.keys(newData).forEach(fieldName => {
+	if(fieldName === 'date_birth' || fieldName === 'sia_badge_expiry' || fieldName === 'bank_statement_date'){
+		let d1 = formatDate(newData[fieldName]);
+		formData.append(fieldName, d1);
+	} else if (fieldName === 'employment_history' || fieldName === 'address_history' || fieldName === 'self_employment' || fieldName === 'gaps_employment'){
+		formData.append(fieldName, JSON.stringify(newData[fieldName]));
+	} else {
+		//console.log(fieldName, newData[fieldName]);
+		formData.append(fieldName, newData[fieldName]);
+	}
+
+});
+
+//document.getElementById("whereToPrint").innerHTML = JSON.stringify(formData, null, 4);
+/*
+	// V IMP CODE
+	for(var pair of formData.entries()){
+	console.log(pair[0]+ ', ' + pair[1]); 
+}
+*/
+
+axios.post('api_forms.php', formData);
 }
 
 const handleNextStep = (newData, final = false) => {
@@ -379,7 +418,7 @@ return(
 			<FormikControl control='checkbox_toggle_switch' label='Do you have any unspent criminal convictions?' name='crime' />
 		</div>
 		<div className="col-md-12">
-			<FormikControl control='input' type='text' label='Detail' name='crime_detail' placeholder='Detail' />
+			<FormikControl control='input' type='text' label='Detail' placeholder='Detail' name='crime_detail' />
 		</div>
 		<div className="col-md-12">
 			<p>NB Certain types of employment and professions are exempt from the Rehabilitation of Offenders Act 1974 and in those cases particularly where the employment sought in relation to positions involving working with children or vulnerable adults, details of all criminal convictions must be given the information given will be treated in the strictest of confidence. Failure to declare a conviction may require us to exclude you from our register or terminate an assignment if the offence is not declared but later comes to light.</p><p className='bold'>GDPR:</p><p>I hereby confirm that the information given is true and correct; I consent to my personal data being included on a computerized database for 36 months and its use to secure me employment/temporary assignments/contracts. I consent to my CV/ID/personal data being forwarded to clients via electronic mail/post and I understand the risk of my documents being unintentionally alerted during the process. I consent to references being passed onto potential employers. If during the course of a temporary assignment the client wishes to employ me direct, I acknowledge that H&D will be entitled either to charge the client an introduction transfer fee, or to agree an extension of the hiring period with the client (after which I may be employed by the client without further charge being applicable to the client).H&D Recruitment Ltd will not market your data without your consent. I fully understand and accept all terms and conditions of H&D Recruitment Ltd.</p>
@@ -419,7 +458,7 @@ return(
 			<FormikControl control='input' type='checkbox' label='Would you have difficulty working in out-door open areas?' name='outdoor' />
 		</div>
 		<div className="col-md-12">
-			<FormikControl control='input' type='checkbox' label='Would you have difficulty working in enclosed spaces?' name='enclosed' />
+			<FormikControl control='input' type='checkbox' label='Would you have difficulty working in enclosed spaces?' name='enclosed1' />
 		</div>
 		<div className="col-md-12">
 			<FormikControl control='input' type='checkbox' label='Would you have difficulty working above head height (e.g. using ladders or maintenance platforms)?' name='head_height' />
@@ -474,13 +513,13 @@ return(
 			<FormikControl control='date' label='Date' name='date2' />
 		</div>
 
-		<div className="col-md-12">
-			<p className='float-start error' style={{display:!(formik.isValid) ? 'block' : 'none'}}>Fill required field(s) first.</p>
-			<button type="submit" className="float-end btn1" disabled={!(formik.isValid)}>Next <i className='fa fa-angle-right'></i></button>
-		</div>
-	</div>{/*row*/}
-	</Form>
-	)}}
+<div className="col-md-12">
+	<p className='float-start error' style={{display:!(formik.isValid) ? 'block' : 'none'}}>Fill required field(s).</p>
+<button type="submit" className="float-end btn1" disabled={!(formik.isValid)}>Next <i className='fa fa-angle-right'></i></button>
+</div>
+</div>{/*row*/}
+</Form>
+)}}
 </Formik>
 );
 }
@@ -506,160 +545,159 @@ const StepTwo = (props) => {
 const handleSubmit = (values) => {
 	props.next(values);
 }
+return(
+<Formik initialValues={props.data} validationSchema={stepTwoValidationSchema} onSubmit={handleSubmit}>
+{formik => {
+console.log('formik', formik)
+return(
+<Form>
+<div className="row">
+	<div className="col-md-12">
+		<h4>Personal Details Form</h4>
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='First Name' name='first_name2' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Surname' name='surname2' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Phone number' name='phone2' />
+	</div>
+	<div className="col-md-12">
+		<FormikControl control='input' type='text' label='Home Address' name='home_address2' />
+	</div>
+	<div className="col-md-6">
+		<FormikControl control='input' type='text' label='Hotel' placeholder='To be filled by Admin' name='hotel2' />
+	</div>
+	<div className="col-md-6">
+		<FormikControl control='input' type='text' label='Report to' name='report_to1' placeholder='To be filled by Admin' />
+	</div>
+	<div className="col-md-6">
+		<FormikControl control='date' label='Start date' name='start_date1' placeholder='To be filled by Admin' />
+	</div>
+	<div className="col-md-6">
+		<FormikControl control='time' label='Start time' name='start_time1' placeholder='To be filled by Admin' />
+	</div>
+	<div className="col-md-2">
+		<FormikControl control='input' type='text' label='Job role' name='job_role2' placeholder='Public Area Cleaner' disabled />
+	</div>
+	<div className="col-md-2">
+		<FormikControl control='input' type='text' label='Hourly rate' name='hourly_rate2' placeholder='11' disabled />
+	</div>
+	<div className="col-md-8">
+		<FormikControl control='input' type='text' label='Uniform' name='dress1' placeholder='BLACK POLO SHIRT, BLACK TROUSER, BLCAK SHOES' disabled />
+	</div>
+	<div className="col-md-12">
+		<FormikControl control='input' type='text' label='Medical History and Allergies' name='medical1' />
+	</div>
+	<div className="col-md-12">
+		<FormikControl control='input' type='checkbox' label='Are you pregnant (if applicable)?' name='pregnant' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Emergency Contact Name' name='emergency_name1' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Emergency Contact Number' name='emergency_number1' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Emergency Contact Address' name='emergency_address1' />
+	</div>
+	<div className="col-md-8">
+		<FormikControl control='input' type='text' label='Signature' name='sign3' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Date' name='date3' />
+	</div>
 
-	return(
-		<Formik initialValues={props.data} validationSchema={stepTwoValidationSchema} onSubmit={handleSubmit}>
-		{formik => {
-		console.log('formik', formik)
-		return(
-			<Form>
-				<div className="row">
-				<div className="col-md-12">
-					<h4>Personal Details Form</h4>
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='input' type='text' label='First Name' name='first_name2' />
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='input' type='text' label='Surname' name='surname2' />
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='input' type='text' label='Phone number' name='phone2' />
-				</div>
-				<div className="col-md-12">
-					<FormikControl control='input' type='text' label='Home Address' name='home_address2' />
-				</div>
-				<div className="col-md-6">
-					<FormikControl control='input' type='text' label='Hotel' name='hotel2' placeholder='To be filled by Admin' />
-				</div>
-				<div className="col-md-6">
-					<FormikControl control='input' type='text' label='Report to' name='report_to1' placeholder='To be filled by Admin' />
-				</div>
-				<div className="col-md-6">
-					<FormikControl control='date' label='Start date' name='start_date1' placeholder='To be filled by Admin' />
-				</div>
-				<div className="col-md-6">
-					<FormikControl control='time' label='Start time' name='start_time1' placeholder='To be filled by Admin' />
-				</div>
-				<div className="col-md-2">
-					<FormikControl control='input' type='text' label='Job role' name='job_role2' placeholder='Public Area Cleaner' disabled />
-				</div>
-				<div className="col-md-2">
-					<FormikControl control='input' type='text' label='Hourly rate' name='hourly_rate2' placeholder='11' disabled />
-				</div>
-				<div className="col-md-8">
-					<FormikControl control='input' type='text' label='Uniform' name='dress1' placeholder='BLACK POLO SHIRT, BLACK TROUSER, BLCAK SHOES' disabled />
-				</div>
-				<div className="col-md-12">
-					<FormikControl control='input' type='text' label='Medical History and Allergies' name='medical1' />
-				</div>
-				<div className="col-md-12">
-					<FormikControl control='input' type='checkbox' label='Are you pregnant (if applicable)?' name='pregnant' />
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='input' type='text' label='Emergency Contact Name' name='emergency_name1' />
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='input' type='text' label='Emergency Contact Number' name='emergency_number1' />
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='input' type='text' label='Emergency Contact Address' name='emergency_address1' />
-				</div>
-				<div className="col-md-8">
-					<FormikControl control='input' type='text' label='Signature' name='sign3' />
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='input' type='text' label='Date' name='date3' />
-				</div>
+	<div className="col-md-12">
+		<h4>Payment Terms for H&D Staff</h4>
+	</div>
+	<div className="col-md-6">
+		<FormikControl control='input' type='text' label='Name' name='name3' />
+	</div>
+	<div className="col-md-6">
+		<FormikControl control='input' type='text' label='Address' name='address3' />
+	</div>
+	<div className="col-md-8">
+		<FormikControl control='input' type='text' label='Designated hotel' name='hotel3' placeholder='To be filled by Admin' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Hourly rate' name='rate' placeholder='11' disabled />
+	</div>
+	<div className="col-md-12">
+		<FormikControl control='input' type='text' label='This is conditional on at least 2 rooms cleaned in one hour. With a total of up _____ rooms cleaned in an 8-hour shift. You will also clean the corridors as and when required by the supervisors.' name='total_rooms' />
+	</div>
+	<div className="col-md-6">
+		<FormikControl control='date' label='First payment date' name='payment_date' />
+	</div>
+	<div className="col-md-12">
+		<p className='bold'>And bi-weekly thereafter.</p>
+		<p>Please note that prior to starting work; <span className='bold'>you might receive 2-3 days of training</span>, which will not be included in your first payment. H&D Recruitment will provide the remuneration for these training days, once you have completed the duration of one month with our agency.</p>
+		<p>The first payment will include the wages from the second week of your employment, as will be the case for the following weeks. All payments will be processed on Tuesday. However, due to occasional technical circumstances beyond our control, the payment may be processed on a Wednesday.</p>
+		<p>Additionally, please be advised that our company's payment procedure follows a bi-weekly format. Therefore, you will only be paid for the days that you have worked in TWO continuous weeks.</p>
+		<p className='bold'>Please note that you need to give us one week notice before you decide to leave the job.</p>
+		<p className='bold'>I understand and accept the payment terms from H&D. I can work 5 days a week including the weekends.</p>
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Signature' name='sign4' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='date' label='Date' name='date4' />
+	</div>
+	<div className="col-md-12">
+		<h5>Agency Staff Quick Induction</h5>
+		<p>I sign that I fully understand and was explained following points during housekeeping departmental induction:</p>
+		<ul>
+			<li>Shifts</li>
+			<li>Accidents</li>
+			<li>Mobile Phones</li>
+			<li>General Appearance</li>
+			<li>Holidays</li>
+			<li>Sickness</li>
+			<li>Fire Procedures</li>
+			<li>Manual Handling</li>
+			<li>Keys & Security</li>
+			<li>Lost Property Procedure</li>
+			<li>C.O.S.H.H.</li>
+			<li>HK Risk Assessments</li>
+			<li>Cleaning Practice</li>
+			<li>Spot Checks</li>
+		</ul>
+		<p className='b2'>Any breach or abuse of the above policies may result in disciplinary action being taken!</p>
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Print name' name='name5' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Agency' name='agency1' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Signature' name='sign5' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Date' name='date5' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label="Trainer's Name" name='trainer_name' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label="Trainer's signature" name='trainer_sign' />
+	</div>
 
-				<div className="col-md-12">
-					<h4>Payment Terms for H&D Staff</h4>
-				</div>
-				<div className="col-md-6">
-					<FormikControl control='input' type='text' label='Name' name='name3' />
-				</div>
-				<div className="col-md-6">
-					<FormikControl control='input' type='text' label='Address' name='address3' />
-				</div>
-				<div className="col-md-8">
-					<FormikControl control='input' type='text' label='Designated hotel' name='hotel3' placeholder='To be filled by Admin' />
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='input' type='text' label='Hourly rate' name='rate' placeholder='11' disabled />
-				</div>
-				<div className="col-md-12">
-					<FormikControl control='input' type='text' label='This is conditional on at least 2 rooms cleaned in one hour. With a total of up _____ rooms cleaned in an 8-hour shift. You will also clean the corridors as and when required by the supervisors.' name='total_rooms' />
-				</div>
-				<div className="col-md-6">
-					<FormikControl control='date' label='First payment date' name='payment_date' />
-				</div>
-				<div className="col-md-12">
-					<p className='bold'>And bi-weekly thereafter.</p>
-					<p>Please note that prior to starting work; <span className='bold'>you might receive 2-3 days of training</span>, which will not be included in your first payment. H&D Recruitment will provide the remuneration for these training days, once you have completed the duration of one month with our agency.</p>
-					<p>The first payment will include the wages from the second week of your employment, as will be the case for the following weeks. All payments will be processed on Tuesday. However, due to occasional technical circumstances beyond our control, the payment may be processed on a Wednesday.</p>
-					<p>Additionally, please be advised that our company's payment procedure follows a bi-weekly format. Therefore, you will only be paid for the days that you have worked in TWO continuous weeks.</p>
-					<p className='bold'>Please note that you need to give us one week notice before you decide to leave the job.</p>
-					<p className='bold'>I understand and accept the payment terms from H&D. I can work 5 days a week including the weekends.</p>
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='input' type='text' label='Signature' name='sign4' />
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='date' label='Date' name='date4' />
-				</div>
-				<div className="col-md-12">
-					<h5>Agency Staff Quick Induction</h5>
-					<p>I sign that I fully understand and was explained following points during housekeeping departmental induction:</p>
-					<ul>
-						<li>Shifts</li>
-						<li>Accidents</li>
-						<li>Mobile Phones</li>
-						<li>General Appearance</li>
-						<li>Holidays</li>
-						<li>Sickness</li>
-						<li>Fire Procedures</li>
-						<li>Manual Handling</li>
-						<li>Keys & Security</li>
-						<li>Lost Property Procedure</li>
-						<li>C.O.S.H.H.</li>
-						<li>HK Risk Assessments</li>
-						<li>Cleaning Practice</li>
-						<li>Spot Checks</li>
-					</ul>
-					<p className='b2'>Any breach or abuse of the above policies may result in disciplinary action being taken!</p>
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='input' type='text' label='Print name' name='name5' />
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='input' type='text' label='Agency' name='agency1' />
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='input' type='text' label='Signature' name='sign5' />
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='input' type='text' label='Date' name='date5' />
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='input' type='text' label="Trainer's Name" name='trainer_name' />
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='input' type='text' label="Trainer's signature" name='trainer_sign' />
-				</div>
-
-				<div className="col-md-4">
-					<button type="button" className='btn1 btn2' onClick={() => props.prev(formik.values)}><i className='fa fa-angle-left'></i> Back</button>
-				</div>				
-				<div className="col-md-4">
-					<p className='float-start' style={{display:!(formik.isValid) ? 'block' : 'none'}}>Fill required value(s) first.</p>
-				</div>
-				<div className="col-md-4">
-					<button type="submit" className='float-end btn1'>Next <i className='fa fa-angle-right'></i></button>
-				</div>
-				</div>{/*row*/}
-			</Form>
-		)}}
-		</Formik>
-	);
+	<div className="col-md-4">
+		<button type="button" className='btn1 btn2' onClick={()=>props.prev(formik.values)}><i className='fa fa-angle-left'></i> Back</button>
+	</div>				
+	<div className="col-md-4">
+		<p className='float-start' style={{display:!(formik.isValid) ? 'block' : 'none'}}>Fill required value(s).</p>
+	</div>
+	<div className="col-md-4">
+		<button type="submit" className='float-end btn1'>Next <i className='fa fa-angle-right'></i></button>
+	</div>
+</div>{/*row*/}
+</Form>
+)}}
+</Formik>
+);
 }
 export default FormPublicAreaCleaner;
