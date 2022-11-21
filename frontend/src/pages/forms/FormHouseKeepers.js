@@ -238,7 +238,7 @@ return(
 			<FormikControl control='input' type='text' label='First Name' name='first_name' placeholder='John' />
 		</div>
 		<div className="col-md-4">
-			<FormikControl control='input' type='text' label='Surname' name='last_name' placeholder='Doe' />
+			<FormikControl control='input' type='text' label='Surname' name='last_name' placeholder='Smith' />
 		</div>
 		<div className="col-md-6">
 			<FormikControl control='input' type='text' label='Phone' name='phone' />
@@ -626,7 +626,7 @@ const handleSubmit = (values) => {
 					<p className='float-start' style={{display:!(formik.isValid) ? 'block' : 'none'}}>Fill required value(s) first.</p>
 				</div>
 				<div className="col-md-4">
-					<button type="submit" className='float-end btn1'>Submit <i className='fa fa-angle-right'></i></button>
+					<button type="submit" className='float-end btn1'>Submit</button>
 				</div>
 				</div>{/*row*/}
 			</Form>

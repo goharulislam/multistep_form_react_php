@@ -326,7 +326,7 @@ return(
 	<FormikControl control='input' type='text' label='First Name' name='first_name1' placeholder='John' />
 </div>
 <div className="col-md-4">
-	<FormikControl control='input' type='text' label='Surname' name='last_name1' placeholder='Doe' />
+	<FormikControl control='input' type='text' label='Surname' name='last_name1' placeholder='Smith' />
 </div>
 <div className="col-md-6">
 	<FormikControl control='input' type='text' label='Phone' name='phone1' />

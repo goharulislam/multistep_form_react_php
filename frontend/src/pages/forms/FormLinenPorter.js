@@ -248,7 +248,7 @@ const steps = [
 			]
 
 return(
-	<section className='steps'>
+	<section className='steps steps_two'>
 		<h3 className='float-start'>Form: Linen Porter</h3>
 		<button className="btn1 btn2 float-end" onClick={() => navigate(-1)}>Back</button>
 		<div>
@@ -258,7 +258,7 @@ return(
 			</ul>
 		</div>
 		<div className='clearfix'></div>
-		<p>Step {currentStep+1} out of 6</p>
+		<p>Step {currentStep+1} out of 2</p>
 		{steps[currentStep]}
 		<pre id="whereToPrint"></pre>
 	</section>
@@ -329,7 +329,7 @@ return(
 			<FormikControl control='input' type='text' label='First Name' name='first_name1' placeholder='John' />
 		</div>
 		<div className="col-md-4">
-			<FormikControl control='input' type='text' label='Surname' name='last_name1' placeholder='Doe' />
+			<FormikControl control='input' type='text' label='Surname' name='last_name1' placeholder='Smith' />
 		</div>
 		<div className="col-md-6">
 			<FormikControl control='input' type='text' label='Phone' name='phone1' />
@@ -690,7 +690,7 @@ const handleSubmit = (values) => {
 					<p className='float-start' style={{display:!(formik.isValid) ? 'block' : 'none'}}>Fill required value(s) first.</p>
 				</div>
 				<div className="col-md-4">
-					<button type="submit" className='float-end btn1'>Next <i className='fa fa-angle-right'></i></button>
+					<button type="submit" className='float-end btn1'>Submit</button>
 				</div>
 				</div>{/*row*/}
 			</Form>

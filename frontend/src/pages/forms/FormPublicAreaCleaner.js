@@ -248,21 +248,17 @@ const steps = [
 			]
 
 return(
-	<section className='steps'>
+	<section className='steps steps_two'>
 		<h3 className='float-start'>Form: Public Area Cleaner</h3>
-		<button className="btn1 btn2 float-end" onClick={() => navigate(-1)}>Back</button>
+		<button className="btn1 btn2 float-end" onClick={() => navigate('/')}>Back</button>
 		<div>
 			<ul className="steps-progress-bar">
 				<li className='active'></li>
 				<li className={currentStep >= 1 ? 'active' : '' }></li>
-				<li className={currentStep >= 2 ? 'active' : '' }></li>
-				<li className={currentStep >= 3 ? 'active' : '' }></li>
-				<li className={currentStep >= 4 ? 'active' : '' }></li>
-				<li className={currentStep >= 5 ? 'active' : '' }></li>
 			</ul>
 		</div>
 		<div className='clearfix'></div>
-		<p>Step {currentStep+1} out of 6</p>
+		<p>Step {currentStep+1} out of 2</p>
 		{steps[currentStep]}
 		<pre id="whereToPrint"></pre>
 	</section>
@@ -329,7 +325,7 @@ return(
 			<FormikControl control='input' type='text' label='First Name' name='first_name1' placeholder='John' />
 		</div>
 		<div className="col-md-4">
-			<FormikControl control='input' type='text' label='Surname' name='last_name1' placeholder='Doe' />
+			<FormikControl control='input' type='text' label='Surname' name='last_name1' placeholder='Smith' />
 		</div>
 		<div className="col-md-6">
 			<FormikControl control='input' type='text' label='Phone' name='phone1' />
@@ -543,7 +539,7 @@ const stepTwoValidationSchema = Yup.object({
 
 const StepTwo = (props) => {
 const handleSubmit = (values) => {
-	props.next(values);
+	props.next(values, true);
 }
 return(
 <Formik initialValues={props.data} validationSchema={stepTwoValidationSchema} onSubmit={handleSubmit}>
@@ -692,7 +688,7 @@ return(
 		<p className='float-start' style={{display:!(formik.isValid) ? 'block' : 'none'}}>Fill required value(s).</p>
 	</div>
 	<div className="col-md-4">
-		<button type="submit" className='float-end btn1'>Next <i className='fa fa-angle-right'></i></button>
+		<button type="submit" className='float-end btn1'>Submit</button>
 	</div>
 </div>{/*row*/}
 </Form>

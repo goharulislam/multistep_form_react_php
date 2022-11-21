@@ -164,6 +164,10 @@ form .kiHXWb span{text-decoration:none; font-weight:300; font-size:16px;}
 .steps .steps-progress-bar li.active p{color:#FFC52D;}
 .steps2 .steps-progress-bar li:after{width:650px; left:-600px;}
 
+.steps_two{display:block;}
+.steps_two .steps-progress-bar{justify-content:flex-start !important;}
+.steps_two .steps-progress-bar li{width:16.5% !important;}
+
 form input[type="text"]{background-image:linear-gradient(#FFC52D, #FFC52D); background-position:0 100%; /*OR bottom left*/ background-size:0% 2px; background-repeat:no-repeat; transition:background-size 0.3s, background-position 0s 0.3s; /*change after the size immediately*/ display:inline-block;}
 form input[type="text"]:focus{/*background-position: 100% 100%; /*OR bottom right*/ border-bottom:0; background-size:100% 2px;}
 
