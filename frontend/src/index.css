@@ -47,13 +47,13 @@ body{font-size:14px; font-style:normal; font-variant:normal; font-weight:normal;
 h1{font-size:40px; font-weight:normal; line-height:normal; font-style:normal; font-variant:normal; font-family:"Poppins"; color:#191918; margin-bottom:15px;}
 h2{font-size:35px; font-weight:normal; line-height:normal; font-style:normal; font-variant:normal; font-family:"Poppins"; color:#191918; margin-bottom:15px;}
 h3{font-size:28px; font-weight:600; line-height:normal; font-style:normal; font-variant:normal; font-family:"Poppins"; color:#191918; margin-bottom:50px;}
-h4{font-size:22px; font-weight:600; line-height:normal; font-style:normal; font-variant:normal; font-family:"Poppins"; color:#FFC52D; margin-bottom:30px;}
+h4{font-size:22px; font-weight:600; line-height:normal; font-style:normal; font-variant:normal; font-family:"Poppins"; color:#FFC52D; margin-bottom:15px;}
 h5{font-size:20px; font-weight:normal; line-height:normal; font-style:normal; font-variant:normal; font-family:"Poppins"; color:#191918; margin-bottom:15px;}
 h6{font-size:18px; font-weight:normal; line-height:normal; font-style:normal; font-variant:normal; font-family:"Poppins"; color:#191918; margin-bottom:15px;}
-p{font-size:18px; font-weight:normal; line-height:25px; font-style:normal; font-variant:normal; font-family:"Poppins"; color:#191918; margin-bottom:10px;}
-span{font-weight:700; line-height:normal; font-style:normal; font-variant:normal; font-family:"Poppins"; color:#FFC52D;}
+p{font-size:17px; font-weight:normal; line-height:25px; font-style:normal; font-variant:normal; font-family:"Poppins"; color:#191918; margin-bottom:10px;}
+span{font-weight:600; line-height:normal; font-style:normal; font-variant:normal; font-family:"Poppins"; color:#FFC52D;}
 li{font-size:18px; font-weight:normal; line-height:normal; font-style:normal; font-variant:normal; font-family:"Poppins"; color:#191918;}
-label{font-size:18px; font-weight:300; line-height:25px; font-style:normal; font-variant:normal; font-family:"Poppins"; color:#191918; margin-bottom:10px;}
+label{font-size:17px; font-weight:300; line-height:23px; font-style:normal; font-variant:normal; font-family:"Poppins"; color:#191918; margin-bottom:10px;}
 a{font-size:18px; font-weight:normal; line-height:normal; font-style:normal; font-variant:normal; font-family:"Poppins"; color:#191918; text-decoration:none; transition:all 0.2s ease 0s; cursor:pointer;}
 input, textarea, select, select option, button{font-size:16px; font-weight:300; line-height:normal; font-style:normal; font-variant:normal; font-family:"Poppins"; color:#191918; margin-bottom:5px;}
 .btn1, .btn1:focus, .btn1:active{font-family:"Poppins"; font-size:16px; background:none; background-image:none; text-align:center; border-radius:5px; color:#fff; background-color:#FFC52D; transition:all 0.5s ease 0s; display:inline-block; border:1px solid transparent; margin-bottom:30px; padding:6px 12px; line-height:1.42857143; letter-spacing:2px;}
@@ -73,7 +73,9 @@ div.center{text-align:center;}
 .search h6{color:#0c4d9f;}
 .search p{color:#191918; font-size:14px;}
 .fc{margin-bottom:40px;}
-label:after{content:" *";}
+label:after{content:"*";}
+label.switch:after{content:"";}
+input[type="file"]{background:none; background-color:rgba(234, 166, 54, 0.05); border:1px solid #FFC52D; border-radius:7px; padding:15px; margin-bottom:30px;}
 
 .slick1 .slick-prev:before, .slick-next:before{font-family:"FontAwesome"; font-size:20px; color:#666; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
 .slick1 .slick-arrow{border-radius:50%; background:none; border:none; width:55px; line-height:45px; padding-top:5px; display:inline-block; top:35%; position:absolute; z-index:5; background-color:#fff; -webkit-box-shadow:0 5px 3px 0 #ccc; box-shadow:0 5px 3px 0 #ccc;}
@@ -100,7 +102,7 @@ label:after{content:" *";}
 .nav2 a{color:#fff;}
 .nav2 a.active{color:#eaa636;}
 
-form{padding:70px 0;}
+form{padding:30px 0;}
 .form-control:focus{border-color:transparent; box-shadow:0 0 0 2px rgb(0 0 0 / 10%);}
 form .error{color:#dc3545; clear:both;}
 form input[type="text"]{width:100%; border:none; border-bottom:2px solid #ddd; padding:10px 0;}
@@ -111,7 +113,7 @@ form textarea{width:100%; border:none; border-bottom:2px solid #ddd; word-wrap:n
 form select{width:100%; border:none; border-bottom:2px solid #ddd; padding:10px 0; background-color:#FFF;}
 form select option{border:none; border-bottom:2px solid #ddd; padding:10px 0;}
 form input:focus{background-color:#fff;}
-form .b2{padding:30px; border:1px solid #000; font-weight:600;}
+form .b2{padding:30px; border:1px solid #000; font-weight:600; margin-bottom:30px;}
 form ul li{display:list-item; list-style:disc;}
 form ul li:last-child{margin-bottom:30px;}
 form .declaration{font-size:16px; text-decoration:underline; margin-bottom:30px; cursor:pointer; font-weight:normal;}
@@ -156,7 +158,7 @@ form .kiHXWb span{text-decoration:none; font-weight:300; font-size:16px;}
 .steps .steps-progress-bar li p{color:#b9b9b9;}
 .steps .steps-progress-bar li:before{font-family:'FontAwesome'; content:'\f00c'; counter-increment:step; width:32px; line-height:32px; display:block; font-size:16px; background-color:#eee; border-radius:3px; margin:0 auto 5px; border-radius:20px; color:#b9b9b9; float:left;}
 /*progressbar connectors*/
-.steps .steps-progress-bar li:after{content:''; width:223px; height:2px; background:#eee; position:absolute; left:-223px; top:16px; z-index:-1}
+.steps .steps-progress-bar li:after{content:''; width:223px; height:2px; background:#eee; position:absolute; left:-211px; top:16px; z-index:-1}
 .steps .steps-progress-bar li:first-child:after{/*connector not needed before the first step*/ content:none;}
 /*marking active/completed steps green*/
 /*The number of the step and the connector before it = green*/
@@ -164,14 +166,13 @@ form .kiHXWb span{text-decoration:none; font-weight:300; font-size:16px;}
 .steps .steps-progress-bar li.active p{color:#FFC52D;}
 .steps2 .steps-progress-bar li:after{width:650px; left:-600px;}
 
-.steps_two{display:block;}
 .steps_two .steps-progress-bar{justify-content:flex-start !important;}
-.steps_two .steps-progress-bar li{width:16.5% !important;}
+.steps_two .steps-progress-bar li{width:19% !important;}
 
 form input[type="text"]{background-image:linear-gradient(#FFC52D, #FFC52D); background-position:0 100%; /*OR bottom left*/ background-size:0% 2px; background-repeat:no-repeat; transition:background-size 0.3s, background-position 0s 0.3s; /*change after the size immediately*/ display:inline-block;}
 form input[type="text"]:focus{/*background-position: 100% 100%; /*OR bottom right*/ border-bottom:0; background-size:100% 2px;}
 
-form .alert{display:flex; border:1px solid #FFC52D; background-color:rgba(234, 166, 54, 0.05); border-radius:10px; margin-top:30px;}
+form .alert{display:flex; border:1px solid #FFC52D; background-color:rgba(234, 166, 54, 0.05); border-radius:10px; margin-bottom:5px;}
 form .alert i{font-size:22px; color:#FFC52D;}
 form .alert p{padding-left:15px; color:#FFC52D; font-size:14px; margin:0;}
 form .alert ul{display:block; margin:0 0 0 15px;}

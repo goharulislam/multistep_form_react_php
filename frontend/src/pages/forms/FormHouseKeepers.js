@@ -124,6 +124,7 @@ axios.post('api_forms.php', formData);
 }
 
 const handleNextStep = (newData, final = false) => {
+	window.scrollTo(0,0);
 	setData((prev) => ({...prev, ...newData}));
 	if(final){
 		makeRequest(newData)
@@ -133,6 +134,7 @@ const handleNextStep = (newData, final = false) => {
 };
 
 const handlePrevStep = (newData) => {
+	window.scrollTo(0,0);
 	setData((prev) => ({...prev, ...newData}));
 	setCurrentStep((prev) => prev - 1);
 };

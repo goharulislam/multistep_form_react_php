@@ -7,12 +7,14 @@ import '../src/fonts/poppins2/poppins.css';
 import 'font-awesome/css/font-awesome.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.js';
+import ScrollToTop from './components/ScrollToTop';
 import '../src/index.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 	<React.StrictMode>
 		<BrowserRouter>
+			<ScrollToTop />
 			<App />
 		</BrowserRouter>
 	</React.StrictMode>

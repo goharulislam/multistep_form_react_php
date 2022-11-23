@@ -180,7 +180,9 @@ const [data, setData] = useState({
 	request_current_address: '',
 	request_previous_address: '',
 	request_name2: '',
-	request_date2: ''
+	request_date2: '',
+	trainer_name1: 'Vlad, Rosou',
+	trainer_sign1: ''
 });
 
 const [currentStep, setCurrentStep] = useState(0);
@@ -229,6 +231,9 @@ axios.post('api_forms.php', formData);
 }
 
 const handleNextStep = (newData, final = false) => {
+	if(final === false){
+		window.scrollTo(0,0);
+	}
 	setData((prev) => ({...prev, ...newData}));
 	if(final){
 		makeRequest(newData)
@@ -238,6 +243,7 @@ const handleNextStep = (newData, final = false) => {
 };
 
 const handlePrevStep = (newData) => {
+	window.scrollTo(0,0);
 	setData((prev) => ({...prev, ...newData}));
 	setCurrentStep((prev) => prev - 1);
 };
@@ -351,16 +357,17 @@ return(
 		<div className="col-md-4">
 			<FormikControl control='input' type='text' label='Hotel assigned' name='hotel1' placeholder='To be filled by Admin' />
 		</div>
-		<div className="col-md-8">
+		<div className='clearfix'></div>
+		<div className="col-md-6">
 			<FormikControl control='checkbox_toggle_switch' label='Are eligeable to work in the UK?' name='eligible_uk' />
 		</div>
-		<div className="col-md-4">
+		<div className="col-md-4 offset-md-2">
 			<FormikControl control='date' label='Permit Expiry Date' name='permit_expiry' />
 		</div>
-		<div className="col-md-8">
+		<div className="col-md-6">
 			<FormikControl control='checkbox_toggle_switch' label='Do you have a Passport?' name='passport' />
 		</div>
-		<div className="col-md-6">
+		<div className="col-md-4 offset-md-2">
 			<FormikControl control='date' label='Passport Expiry Date' name='passport_expiry' />
 		</div>
 		<div className="col-md-6">
@@ -427,7 +434,7 @@ return(
 		</div>
 
 		<div className="col-md-12">
-			<h3>Medical Health Certification & Health Declaration</h3>
+			<h4>Medical Health Certification & Health Declaration</h4>
 			<p>To comply with the Health and Safety at Work Act 1974, H&D Recruitment Limited are obliged to ensure that the health and safety of our temporary workers remains our highest priority. If you are on working machines, or doing a task that could harm others if you are not medically fit, you could be held personally liable for not declaring this to the site where you are working and also to H&D Recruitment Ltd, your employing organization. Alertness and reasonable physical fitness are essential for duties which may interact with moving trains. It is, therefore, important to be accurate with your answers to this questionnaire, although trivial matters should be ignored (e.g. transient dizziness while gardening two years ago).</p>
 			<p className="bold">When you declare NO, you are accepting a degree of responsibility for your safety, and those of others who may come to harm in your work place.</p>
 		</div>
@@ -675,10 +682,10 @@ return(
 		<FormikControl control='input' type='text' label='Date' name='date5' />
 	</div>
 	<div className="col-md-4">
-		<FormikControl control='input' type='text' label="Trainer's Name" name='trainer_name' />
+		<FormikControl control='input' type='text' label="Trainer's Name" name='trainer_name1' disabled />
 	</div>
 	<div className="col-md-4">
-		<FormikControl control='input' type='text' label="Trainer's signature" name='trainer_sign' />
+		<FormikControl control='input' type='text' label="Trainer's signature" name='trainer_sign1' />
 	</div>
 
 	<div className="col-md-4">

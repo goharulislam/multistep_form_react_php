@@ -205,15 +205,20 @@ axios.post('api_forms.php', formData);
 }
 
 const handleNextStep = (newData, final = false) => {
+	if(final === false){
+		window.scrollTo(0,0);
+	}
 	setData((prev) => ({...prev, ...newData}));
 	if(final){
 		makeRequest(newData)
 		return;
+		//navigate('https://handdservices.co.uk/career/');
 	}
 	setCurrentStep((prev) => prev + 1);
 };
 
 const handlePrevStep = (newData) => {
+	window.scrollTo(0,0);
 	setData((prev) => ({...prev, ...newData}));
 	setCurrentStep((prev) => prev - 1);
 };
@@ -829,7 +834,7 @@ return(
 		<p className='small'>(e.g. Passport/ Birth Certificate/ EU ID Card/ Visa)</p>
 	</div>
 	<div className="col-md-3" style={{display: formik.values.eligible_uk ? 'block' : 'none' }}>
-		<FormikControl className='float-end' control='select' label='' name='uk_document' options={dropdownDocuments} />
+		<FormikControl className='float-end' control='select' label='Select' name='uk_document' options={dropdownDocuments} />
 	</div>
 	<div className="col-md-9">
 		<p className='strong'>Rehabilitation of Offenders Act 1974</p>
@@ -840,7 +845,7 @@ return(
 		<FormikControl control='checkbox_toggle_switch' label='' name='rehab_eligible' />
 	</div>
 	<div className='col-md-12' style={{display: formik.values.rehab_eligible ? 'block' : 'none' }}>
-		<FormikControl placeholder='Type here the detail' control='input' type='text' label='' name='rehab_private' />
+		<FormikControl placeholder='Type here the detail' control='input' type='text' label='Detail' name='rehab_private' />
 	</div>
 	<div className="col-md-12 green">
 		<FormikControl control='input' type='checkbox' label="I confirm that I have declared all prosecutions pending and all convictions which cannot be considered 'spent', as defined by the Rehabilitation of Offenders Act 1974." name='rehab_confirm' />
@@ -910,6 +915,7 @@ return(
 <Form>
 <div className="row">
 <div className="col-md-12">
+	<h4>Medical Health Certification & Health Declaration</h4>
 	<p className='small'>To comply with the Health and Safety at Work Act 1974, H&D Recruitment Limited are obliged to ensure that the health and safety of our temporary workers remains our highest priority. If you are on working machines, or doing a task that could harm others if you are not medically fit, you could be held personally liable for not declaring this to the site where you are working and also to H&D Recruitment Ltd, your employing organization. Alertness and reasonable physical fitness are essential for duties which may interact with moving trains. It is, therefore, important to be accurate with your answers to this questionnaire, although trivial matters should be ignored (e.g. transient dizziness while gardening two years ago).</p>
 	<p className='strong'>When you declare NO, you are accepting a degree of responsibility for your safety, and those of others who may come to harm in your work place</p>
 </div>

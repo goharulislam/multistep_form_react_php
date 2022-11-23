@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {Formik, Form, FieldArray} from 'formik';
+import {Formik, Form, FieldArray, ErrorMessage} from 'formik';
 import FormikControl from './assets/FormikControl';
 import * as Yup from 'yup';
 import axios from '../../axios/index';
@@ -11,8 +11,11 @@ const [errors, setErrors] = useState({});
 let formData = new FormData();
 const navigate = useNavigate();
 const [data, setData] = useState({
+	title: '',
 	first_name1: '',
 	last_name1: '',
+	phone1: '',
+	email1: '',
 	home_address: '',
 	postal_code: '',
 	region: '',
@@ -179,7 +182,9 @@ const [data, setData] = useState({
 	request_current_address: '',
 	request_previous_address: '',
 	request_name2: '',
-	request_date2: ''
+	request_date2: '',
+	trainer_name1: 'Vlad, Rosou',
+	trainer_sign1: ''
 });
 
 function formatDate(date){
@@ -225,6 +230,9 @@ axios.post('api_forms.php', formData);
 }
 
 const handleNextStep = (newData, final = false) => {
+	if(final === false){
+		window.scrollTo(0,0);
+	}
 	setData((prev) => ({...prev, ...newData}));
 	if(final){
 		makeRequest(newData)
@@ -234,6 +242,7 @@ const handleNextStep = (newData, final = false) => {
 };
 
 const handlePrevStep = (newData) => {
+	window.scrollTo(0,0);
 	setData((prev) => ({...prev, ...newData}));
 	setCurrentStep((prev) => prev - 1);
 };
@@ -244,13 +253,12 @@ const steps = [
 	<StepThree next={handleNextStep} prev={handlePrevStep} data={data} errors={errors} />,
 	<StepFour next={handleNextStep} prev={handlePrevStep} data={data} errors={errors} />,
 	<StepFive next={handleNextStep} prev={handlePrevStep} data={data} errors={errors} />,
-	<StepSix next={handleNextStep} prev={handlePrevStep} data={data} errors={errors} />
 ]
 
 return(
-<section className='steps'>
+<section className='steps steps_two'>
 <h3 className='float-start'>Form: Waiter</h3>
-<button className="btn1 btn2 float-end" onClick={() => navigate(-1)}>Back</button>
+<button className="btn1 btn2 float-end" onClick={() => navigate('/')}>Back</button>
 <div>
 	<ul className="steps-progress-bar">
 		<li className='active'></li>
@@ -258,11 +266,10 @@ return(
 		<li className={currentStep >= 2 ? 'active' : '' }></li>
 		<li className={currentStep >= 3 ? 'active' : '' }></li>
 		<li className={currentStep >= 4 ? 'active' : '' }></li>
-		<li className={currentStep >= 5 ? 'active' : '' }></li>
 	</ul>
 </div>
 <div className='clearfix'></div>
-	<p>Step {currentStep+1} out of 6</p>
+	<p>Step {currentStep+1} out of 5</p>
 	{steps[currentStep]}
 	<pre id="whereToPrint"></pre>
 </section>
@@ -346,13 +353,14 @@ return(
 <div className="col-md-4">
 	<FormikControl control='input' type='text' label='Hotel assigned' name='hotel' placeholder='To be filled by Admin' />
 </div>
-<div className="col-md-8">
+<div className='clearfix'></div>
+<div className="col-md-6">
 	<FormikControl control='checkbox_toggle_switch' label='Are eligeable to work in the UK?' name='eligible_uk' />
 </div>
-<div className="col-md-4">
+<div className="col-md-6">
 	<FormikControl control='date' label='Permit Expiry Date' name='permit_expiry' />
 </div>
-<div className="col-md-8">
+<div className="col-md-6">
 	<FormikControl control='checkbox_toggle_switch' label='Do you have a Passport?' name='passport' />
 </div>
 <div className="col-md-6">
@@ -422,9 +430,9 @@ return(
 		</div>
 
 		<div className="col-md-12">
-			<h3>Medical Health Certification & Health Declaration</h3>
+			<h4>Medical Health Certification & Health Declaration</h4>
 			<p>To comply with the Health and Safety at Work Act 1974, H&D Recruitment Limited are obliged to ensure that the health and safety of our temporary workers remains our highest priority. If you are on working machines, or doing a task that could harm others if you are not medically fit, you could be held personally liable for not declaring this to the site where you are working and also to H&D Recruitment Ltd, your employing organization. Alertness and reasonable physical fitness are essential for duties which may interact with moving trains. It is, therefore, important to be accurate with your answers to this questionnaire, although trivial matters should be ignored (e.g. transient dizziness while gardening two years ago).</p>
-			<p className="bold">When you declare NO, you are accepting a degree of responsibility for your safety, and those of others who may come to harm in your work place.</p>
+			<p className="strong">When you declare NO, you are accepting a degree of responsibility for your safety, and those of others who may come to harm in your work place.</p>
 		</div>
 		<div className="col-md-12">
 			<FormikControl control='input' type='checkbox' label='Do you have Diabetes needing Insulin?' name='diabetes' />
@@ -665,10 +673,10 @@ const handleSubmit = (values) => {
 					<FormikControl control='input' type='text' label='Date' name='date5' />
 				</div>
 				<div className="col-md-4">
-					<FormikControl control='input' type='text' label="Trainer's Name" name='trainer_name' />
+					<FormikControl control='input' type='text' label="Trainer's Name" name='trainer_name1' disabled />
 				</div>
 				<div className="col-md-4">
-					<FormikControl control='input' type='text' label="Trainer's signature" name='trainer_sign' />
+					<FormikControl control='input' type='text' label="Trainer's signature" name='trainer_sign1' />
 				</div>
 
 				<div className="col-md-4">
@@ -796,17 +804,58 @@ const handleSubmit = (values) => {
 }
 return(
 <Formik initialValues={props.data} validationSchema={stepFourValidationSchema} onSubmit={handleSubmit}>
-{(formProps) => (
+{(formik) => (
 <Form>
 <div className="row">
-<div className="col-md-12">
-	<p className='small'>To comply with the Health and Safety at Work Act 1974, H&D Recruitment Limited are obliged to ensure that the health and safety of our temporary workers remains our highest priority. If you are on working machines, or doing a task that could harm others if you are not medically fit, you could be held personally liable for not declaring this to the site where you are working and also to H&D Recruitment Ltd, your employing organization. Alertness and reasonable physical fitness are essential for duties which may interact with moving trains. It is, therefore, important to be accurate with your answers to this questionnaire, although trivial matters should be ignored (e.g. transient dizziness while gardening two years ago).</p>
-	<p className='strong'>When you declare NO, you are accepting a degree of responsibility for your safety, and those of others who may come to harm in your work place</p>
-</div>
-<div className="col-md-12">
-	<button type='button' className='btn1 btn2' onClick={() => props.prev(formProps.values)}><i className='fa fa-angle-left'></i> Back</button>
-	<button type='submit' className='float-end btn1'>Next <i className='fa fa-angle-right'></i></button>
-</div>
+	<div className="col-md-12">
+		<h4>Passport</h4>
+		<div className="alert" role="alert"><i className="fa fa-info-circle"></i><p>Make sure your Passport is VALID.</p></div>
+		<input type='file' onChange={(event)=>{formik.setFieldValue('file_passport', event.target.files[0])}} />
+		<ErrorMessage name="file_passport" />
+	</div>
+	<div className="clearfix"></div>
+	<div className="clearfix"></div>
+	<div className="col-md-12">
+		<h4>Picture</h4>
+		<div className="alert" role="alert"><i className="fa fa-info-circle"></i><p>Make sure you upload a picture having white background and your head, shoulder and all the corners of the picture must be visible.</p></div>
+		<input type='file' onChange={(event)=>{formik.setFieldValue('file_picture', event.target.files[0])}} />
+		<ErrorMessage name="file_picture" />
+	</div>
+	<div className="col-md-12">
+		<h4>National Insurance Letter/NI Insurance Card</h4>
+		<div className="alert" role="alert"><i className="fa fa-info-circle"></i><p>Make sure you upload your National Insurance Number not your Reference Number. The source of your NI must be from Her Majesty's Revenue and Customs (HMRC).</p></div>
+		<input type='file' onChange={(event)=>{formik.setFieldValue('file_national_insurance_letter', event.target.files[0])}} />
+		<ErrorMessage name="file_national_insurance_letter" />
+	</div>
+	<div className="col-md-12">
+		<h4>Proof of Address</h4>
+		<div className="alert" role="alert"><i className="fa fa-info-circle"></i><p>Proof of Address must not be older than 3 months Upload any one of them as your POA: Full Driving License, Utility Bill, Council Tax Letter, Bank Statement, Tenancy Agreement, Letter from your university confirmation your address (if you're a student)</p></div>
+		<input type='file' onChange={(event)=>{formik.setFieldValue('file_proof_address', event.target.files[0])}} />
+		<ErrorMessage name="file_proof_address" />
+	</div>
+	<div className="col-md-12">
+		<h4>Biometric Residence Permit (BRP) / EU Share Code</h4>
+		<div className="alert" role="alert">
+			<i className="fa fa-info-circle"></i>
+			<ul>
+				<li>If you're a British Citizen,</li>
+				<li>skip BRPIf you're a Non-British and European Citizen, upload BRP (Front and Back)</li>
+				<li>If you're a Non-British and Non-European Citizen, upload your EU Share Code</li>
+			</ul>
+		</div>
+	</div>
+	<div className="col-md-6">
+		<input type='file' onChange={(event)=>{formik.setFieldValue('file_brp1', event.target.files[0])}} />
+		<ErrorMessage name="file_brp1" />
+	</div>
+	<div className="col-md-6">
+		<input type='file' onChange={(event)=>{formik.setFieldValue('file_brp2', event.target.files[0])}} />
+		<ErrorMessage name="file_brp2" />
+	</div>
+	<div className="col-md-12">
+		<button type='button' className='btn1 btn2' onClick={() => props.prev(formik.values)}><i className='fa fa-angle-left'></i> Back</button>
+		<button type='submit' className='float-end btn1'>Next <i className='fa fa-angle-right'></i></button>
+	</div>
 </div>{/*row*/}
 </Form>
 )}
@@ -823,283 +872,194 @@ const stepFiveValidationSchema = Yup.object({
 
 const StepFive = (props) => {
 
-	const handleSubmit = (values) => {
-		props.next(values);
-	}
-
-	return(
-		<Formik initialValues={props.data} validationSchema={stepFiveValidationSchema} onSubmit={handleSubmit}>
-		{(formProps) => (
-			<Form>
-				<div className="row">
-				<div className="col-md-12">
-					<h4>Passport</h4>
-					<div className="alert" role="alert">
-						<i className="fa fa-info-circle"></i><p>Make sure your Passport is VALID.</p>
-					</div>
-				</div>
-				<div className="col-md-6">
-					<FormikControl control='file' name='file_passport' />
-				</div>
-				<div className="clearfix"></div>
-				<div className="col-md-12">
-					<h4>Picture</h4>
-					<div className="alert" role="alert">
-						<i className="fa fa-info-circle"></i><p>Make sure you upload a picture having white background and your head, shoulder and all the corners of the picture must be visible.</p>
-					</div>
-				</div>
-				<div className="col-md-6">
-					<FormikControl control='file' name='file_picture' />
-				</div>
-
-				<div className="col-md-12">
-					<h4>National Insurance Letter/NI Insurance Card</h4>
-					<div className="alert" role="alert">
-						<i className="fa fa-info-circle"></i>
-						<p>Make sure you upload your National Insurance Number not your Reference Number. The source of your NI must be from Her Majesty's Revenue and Customs (HMRC).</p>
-					</div>
-				</div>
-				<div className="col-md-6">
-					<FormikControl control='file' name='file_national_insurance_letter' />
-				</div>
-				<div className="clearfix"></div>
-				<div className="col-md-12">
-					<h4>Proof of Address</h4>
-					<div className="alert" role="alert">
-						<i className="fa fa-info-circle"></i>
-						<p>Proof of Address must not be older than 3 months Upload any one of them as your POA: Full Driving License, Utility Bill, Council Tax Letter, Bank Statement, Tenancy Agreement, Letter from your university confirmation your address (if you're a student)</p>
-					</div>
-				</div>
-				<div className="col-md-6">
-					<FormikControl control='file' name='file_proof_address' />
-				</div>
-				<div className="clearfix"></div>
-				<div className="col-md-12">
-					<h4>Biometric Residence Permit (BRP) / EU Share Code</h4>
-					<div className="alert" role="alert">
-						<i className="fa fa-info-circle"></i>
-						<ul>
-							<li>If you're a British Citizen,</li>
-							<li>skip BRPIf you're a Non-British and European Citizen, upload BRP (Front and Back)</li>
-							<li>If you're a Non-British and Non-European Citizen, upload your EU Share Code</li>
-						</ul>
-					</div>
-				</div>
-				<div className="col-md-6">
-					<FormikControl control='file' name='file_brp1' />
-				</div>
-				<div className="col-md-6">
-					<FormikControl control='file' name='file_brp2' />
-				</div>
-
-				<div className="col-md-12">
-				<button type='button' className='btn1 btn2' onClick={() => props.prev(formProps.values)}><i className='fa fa-angle-left'></i> Back</button>
-				<button type='submit' className='float-end btn1'>Next <i className='fa fa-angle-right'></i></button>
-				</div>
-				</div>{/*row*/}
-			</Form>
-		)}
-		</Formik>
-	);
+const handleSubmit = (values) => {
+	props.next(values, true);
 }
 
-const stepSixValidationSchema = Yup.object({
-	/*email: Yup.string().required().email().label('Email'),
-	password: Yup.string().required().label('Password'),
-	university_start_date: Yup.string().required(),
-	university_finish_date: Yup.string().required(),*/
-});
+return(
+<Formik initialValues={props.data} validationSchema={stepFiveValidationSchema} onSubmit={handleSubmit}>
+{(formik) => (
+<Form>
+<div className="row">
+	<div className="col-md-12">
+		<h4>Disclaimer and signature</h4>
+		<p className='strong'>General Data Storage Regulation Declaration</p>
+		<p className='strong'>NB Certain types of employment and professions are exempt from the Rehabilitation of Offenders Act 1974 and in those cases particularly where the employment sought in relation to positions involving working with children or vulnerable adults, details of all criminal convictions must be given the information given will be treated in the strictest of confidence. Failure to declare a conviction may require us to exclude you from our register or terminate an assignment if the offence is not declared but later comes to light.</p>
+		<p className='small'>I hereby confirm that the information given is true and correct; I consent to my personal data being included on a computerized database and its use in order to secure me employment/temporary assignments/contracts. I consent to my details being forwarded to clients via electronic mail and I understand the risk of my details being unintentionally alerted during the process. I consent to references being passed onto potential employers. If during the course of a temporary assignment the client wishes to employ me direct, I acknowledge that H&D will be entitled either to charge the client an introduction transfer fee, or to agree an extension of the hiring period with the client (after which I may be employed by the client without Further charge being applicable to the client). Furthermore, I authorize H&D Recruitment Ltd to pay all sums due to me in respect of services I supply to the nominated account above. I authorize H&D Recruitment Ltd to pay all sums due to me in respect of services I supply to the nominated account above. I agree that I will work for my client or indirectly, if I do this without the written consent of H&D, then I would be liable to a £1100 charge.</p>
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Signature' name='disclaimer_name' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='date' label='Date' name='disclaimer_date' />
+	</div>
+	<div className="col-md-12">
+		<p className='strong'>General Data Protection Regulation (GDPR)- Opt Out Agreement</p>
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Name' name='gdpr_name1' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Department' name='gdpr_department' />
+	</div>
+	<div className="col-md-12">
+		<p className='small'>This agreement is drawn up under the General Data Protection Regulation and allows you to enter into agreement with H&D Recruitment to consent to the Company sharing your information with a third- Party HR Company and in online marketing.</p>
+		<p className='small'>The Company will display the certificate confirming the HR Company being used in Quality Management System/Certificates. The Company will notify you of when your name and picture will be used for marketing purposes.</p>
+		<p className='small'>The Company confirm that the HR Company adhere to the GDPR and will only utilize the information provided in their advisory capacity to the Company.</p>
+		<p className='small'>1. I agree that the GDPR, shall not apply to my records in so far as the Company seeking advice on my employment.</p>
+		<p className='small'>2. I agree the Company can use my name and photo on Company social media and website for any Company recognition scheme.</p>
+		<p className='small'>3. I understand that this agreement will apply with effect from:</p>
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='date' label='Date' name='gdpr_date1' />
+	</div>
+	<div className="col-md-1">
+		<p style={{margin:'30px 0 0', textAlign:'center'}}>to</p>
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='date' label='Date' name='gdpr_date2' />
+	</div>
+	<div className='clearfix'></div>
+	<div className="col-md-12">
+		<p className='small'>4. Notwithstanding my agreement to dis-apply the GDPR in these specific circumstances, I am fully aware that I can opt back in at any time.</p>
+		<p className='small'>5. I agree that I have entered into this agreement voluntarily and understand I am under no obligation to sign this agreement and that it is illegal for me to be subject to any detriment if    I decline to sign.</p>
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Signature' name='gdpr_name2' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Name' name='gdpr_name3' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='date' label='Date' name='gdpr_date3' />
+	</div>				
+	<div className="col-md-12">
+		<h4>Security Screening Disclosure & Authorization Form (BS 7858: 2012)</h4>
+		<p className='small'>Performing security screening necessitates the handling of personal data and as such must comply with the Data Protection Act. A requirement of the Act is that individuals must explicitly consent to any processing of their personal data. The details you are asked to provide within this Disclosure and Authorization form along with supporting certificates and documentation will be used by H&D Recruitment to carry out checks and searches of all or any of these details. This will include a search or searches carried out with a licensed credit reference agency, with previous employers, Government agencies and related persons and organization. The information obtained will be securely handled and recorded in a standard report format. I hereby authorize H&D Recruitment to approach my former employers, persons you have provided as character references, connected businesses and suppliers, schools, colleges, character referees, the Police, credit reference agencies, criminal record bureau and any government agencies for verifying the information that I have supplied in the Application for Employment Form. By signing this form, you expressly consent to H&D Recruitment using your information for purposes of vetting to conduct these enquiries and the licensed credit reference agency to report information personal to yourself to H&D Recruitment (The credit reference search is limited to a search for Bankruptcy, Insolvency or County Court Judgments and does not access personal credit details). The data will be controlled by The Client and will be kept secure in your personal screening file. The information will be retained in electronic data back-up format by H&D Recruitment only if for BS 7858: 2006 accreditation and audit purposes. Please note, however, that the data may be for audit purpose by other inspectorate boards or in relation to BS 7799 and 7499 Information Security Audit. About this security screening, H&D Recruitment will carry out any searches. Contacting establishments and organizations named by me to check any or all the information supplied. I agree that this may include a search with a credit reference agency. I hereby expressly consent to such searches being carried out and where a record of such search or check being retained. I further authorize H&D Recruitment to take up a consumer information search with a credit reference agency. I am aware that the credit reference agency will keep a record of that search and may share that information with other credit reference agencies. By completing this application form, I consent to the transfer of my information to the Disclosure and Barring Service for a Disclosure Application. I confirm that the information that I have provided in support of this application is complete and true and understand that to knowingly make a false statement for this purpose is a criminal offence.</p>
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='This is to certify that I' name='screening_name' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='date' label='Date' name='screening_date_birth' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Place of birth' name='screening_place_birth' />
+	</div>
+	<div className="col-md-12">
+		<p className='small'>Give approval for my personal information which I have supplied herein to be transferred to H&D Recruitment to assist in this security screening process and that the information I have provided may be screened for verification, accuracy and authenticity. In turn I also expressly consent to H&D Recruitment to return the result of such checks to The Client.</p>
+		<p className='small'>I hereby authorize the screening of my:</p>
+		<p className='small'>1. Address verification including 10-year residential history</p>
+		<p className='small'>2. County Court Judgments, bankruptcy and insolvency search</p>
+		<p className='small'>3. Obtaining references from referees</p>
+		<p className='small'>4. 10-year employment history checked to source</p>
+		<p className='small'>5. Outstanding, or unresolved criminal cases (CRB) only where necessary</p>
+		<p className='small'>I further declare that all the information I have supplied herein is, to the best of my knowledge and belief, correct. If I agree to obtain information or certificates which may be to substantiate any information. I acknowledge that misrepresentation, or failure to disclose material facts either during application or throughout employment may constitute grounds for immediate dismissal and/or legal action.</p>
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Signature' name='approval_name1' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Name' name='approval_name2' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='date' label='Date' name='approval_date' />
+	</div>
 
-const StepSix = (props) => {
+	<div className="col-md-12">
+		<h5>Working Time Directive</h5>
+		<h4>The Working Time Regulations 1998</h4>
+		<p className='small'>These have been designed to implement the provisions of the 1993 EC Working Time Directive and set down regulations which allow restrictions on the number of average weekly hours worked by employee.</p>
+	</div>
+	<div className="col-md-12">
+		<h5>EMPLOYEE RIGHTS</h5>
+		<p className='small'>These have been designed to implement the provisions of the 1993 EC Working Time Directive and set down regulations which allow restrictions on the number of average weekly hours worked by employee</p>
+	</div>
+	<div className="col-md-12">
+		<h5>EMPLOYEE RIGHTS</h5>
+		<ul className='small'>
+			<li>A limit of 48 hours on the average weekly working time.</li>
+			<li>A minimum of four weeks (20 days) paid annual leave.</li>
+			<li>Entitlements to daily and weekly rest periods.</li>
+			<li>Provision to limit the working hours for night workers.</li>
+			<li>The right for health assessment for workers involved in night working.</li>
+			<li>Where the employee agrees to work more than 48 hours per week. The Employer is to provide compensatory rest peri</li>
+		</ul>
+	</div>
+	<div className="col-md-12">
+		<h5>FLEXIBILTY</h5>
+		<ul className='small'>
+			<li>To allow employers and employees to enter into agreement to allow for average working time in excess of 48 hours per week.</li>
+			<li>Workers engaged in security surveillance work (Security Guards & Caretakers), in providing services relating to reception, treatment, or care provided by hospitals, similar establishments, residential institutions, are exempt from the regulations governing rest periods and night work.</li>
+			<li>Entitlements to daily and weekly rest periods.</li>
+			<li>Employees who agree to work over 48 hours per week are entitled to compensatory rest periods.</li>
+		</ul>
+	</div>
+	<div className="col-md-12">
+		<h5>Declaration & Agreement</h5>
+		<p>I</p>
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Name' name='agreement_name1' />
+	</div>
+	<div className="col-md-4">
+		<p className="strong">, have been made aware of my rights as an employee under the provisions of the Working Time Regulations 1998. I hereby voluntary agree to waive my rights under the Regulations to restrict my average working weekly hours to 48. I accept that my employer may therefore require me to work more than an average of 48 hours per week and understand that this Agreement should be read in conjunction with my Terms and Conditions of service. Furthermore, I agree to be bound by this Agreement unless I give my employer three months' notice in writing of my intentions to revoke this Agreement.</p>
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Signature' name='agreement_name2' />
+	</div>
+	<div className="clearfix"></div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Employee Name' name='agreement_name3' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Signature' name='agreement_name4' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='date' label='Date' name='agreement_date' />
+	</div>
+	<div className="col-md-12">
+		<h5>Subject Access Request Team Mandate</h5>
+		<p className='strong'>I the undersigned would like to request a 5 YEAR EMPLOYMENT HISTORY, with details of Employers, Earnings & National Insurance details under the terms of the Data Protection Act 1998.</p>
+		<p className='strong'>I would like this record issued directly to the third party detailed below</p>
+		<p className='small'>Your Company Name</p>
+		<p className='small yellow'>H&D Recruitment</p>
+		<p className='small'>Your Company Address</p>
+		<p className='small yellow'>4 Bell Parade Bell Road Hounslow TW3 3NU</p>
+		<p className='small'>Your Company Email</p>
+		<p className='small yellow'>info@handdservices.co.uk</p>
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Name' name='request_name1' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='NI Number' name='request_ni_number' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='date' label='Date of Birth' name='request_date1' />
+	</div>
+	<div className="col-md-6">
+		<FormikControl control='input' type='text' label='Current Address' name='request_current_address' />
+	</div>
+	<div className="col-md-6">
+		<FormikControl control='input' type='text' label='Previous Address' name='request_previous_address' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Signature' name='request_name2' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='date' label='Date of Birth' name='request_date2' />
+	</div>
 
-	const handleSubmit = (values) => {
-		props.next(values, true);
-	}
-
-	return(
-		<Formik initialValues={props.data} validationSchema={stepSixValidationSchema} onSubmit={handleSubmit}>
-		{(formProps) => (
-			<Form>
-				<div className="row">
-				<div className="col-md-12">
-					<h4>Disclaimer and signature</h4>
-					<p className='strong'>General Data Storage Regulation Declaration</p>
-					<p className='strong'>NB Certain types of employment and professions are exempt from the Rehabilitation of Offenders Act 1974 and in those cases particularly where the employment sought in relation to positions involving working with children or vulnerable adults, details of all criminal convictions must be given the information given will be treated in the strictest of confidence. Failure to declare a conviction may require us to exclude you from our register or terminate an assignment if the offence is not declared but later comes to light.</p>
-					<p className='small'>I hereby confirm that the information given is true and correct; I consent to my personal data being included on a computerized database and its use in order to secure me employment/temporary assignments/contracts. I consent to my details being forwarded to clients via electronic mail and I understand the risk of my details being unintentionally alerted during the process. I consent to references being passed onto potential employers. If during the course of a temporary assignment the client wishes to employ me direct, I acknowledge that H&D will be entitled either to charge the client an introduction transfer fee, or to agree an extension of the hiring period with the client (after which I may be employed by the client without Further charge being applicable to the client). Furthermore, I authorize H&D Recruitment Ltd to pay all sums due to me in respect of services I supply to the nominated account above. I authorize H&D Recruitment Ltd to pay all sums due to me in respect of services I supply to the nominated account above. I agree that I will work for my client or indirectly, if I do this without the written consent of H&D, then I would be liable to a £1100 charge.</p>
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='input' type='text' label='Signature' name='disclaimer_name' />
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='date' label='Date' name='disclaimer_date' />
-				</div>
-				<div className="col-md-12">
-					<p className='strong'>General Data Protection Regulation (GDPR)- Opt Out Agreement</p>
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='input' type='text' label='Name' name='gdpr_name1' />
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='input' type='text' label='Department' name='gdpr_department' />
-				</div>
-				<div className="col-md-12">
-					<p className='small'>This agreement is drawn up under the General Data Protection Regulation and allows you to enter into agreement with H&D Recruitment to consent to the Company sharing your information with a third- Party HR Company and in online marketing.</p>
-					<p className='small'>The Company will display the certificate confirming the HR Company being used in Quality Management System/Certificates. The Company will notify you of when your name and picture will be used for marketing purposes.</p>
-					<p className='small'>The Company confirm that the HR Company adhere to the GDPR and will only utilize the information provided in their advisory capacity to the Company.</p>
-						<p className='small'>1. I agree that the GDPR, shall not apply to my records in so far as the Company seeking advice on my employment.</p>
-						<p className='small'>2. I agree the Company can use my name and photo on Company social media and website for any Company recognition scheme.</p>
-						<p className='small'>3. I understand that this agreement will apply with effect from:</p>
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='date' label='Date' name='gdpr_date1' />
-				</div>
-				<div className="col-md-1">
-					<p style={{margin:'30px 0 0', textAlign:'center'}}>to</p>
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='date' label='Date' name='gdpr_date2' />
-				</div>
-				<div className='clearfix'></div>
-				<div className="col-md-12">
-						<p className='small'>4. Notwithstanding my agreement to dis-apply the GDPR in these specific circumstances, I am fully aware that I can opt back in at any time.</p>
-						<p className='small'>5. I agree that I have entered into this agreement voluntarily and understand I am under no obligation to sign this agreement and that it is illegal for me to be subject to any detriment if    I decline to sign.</p>
-				</div>
-				<div className="col-md-4">
-				<FormikControl control='input' type='text' label='Signature' name='gdpr_name2' />
-				</div>
-				<div className="col-md-4">
-				<FormikControl control='input' type='text' label='Name' name='gdpr_name3' />
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='date' label='Date' name='gdpr_date3' />
-				</div>				
-				<div className="col-md-12">
-					<h4>Security Screening Disclosure & Authorization Form (BS 7858: 2012)</h4>
-					<p className='small'>Performing security screening necessitates the handling of personal data and as such must comply with the Data Protection Act. A requirement of the Act is that individuals must explicitly consent to any processing of their personal data. The details you are asked to provide within this Disclosure and Authorization form along with supporting certificates and documentation will be used by H&D Recruitment to carry out checks and searches of all or any of these details. This will include a search or searches carried out with a licensed credit reference agency, with previous employers, Government agencies and related persons and organization. The information obtained will be securely handled and recorded in a standard report format. I hereby authorize H&D Recruitment to approach my former employers, persons you have provided as character references, connected businesses and suppliers, schools, colleges, character referees, the Police, credit reference agencies, criminal record bureau and any government agencies for verifying the information that I have supplied in the Application for Employment Form. By signing this form, you expressly consent to H&D Recruitment using your information for purposes of vetting to conduct these enquiries and the licensed credit reference agency to report information personal to yourself to H&D Recruitment (The credit reference search is limited to a search for Bankruptcy, Insolvency or County Court Judgments and does not access personal credit details). The data will be controlled by The Client and will be kept secure in your personal screening file. The information will be retained in electronic data back-up format by H&D Recruitment only if for BS 7858: 2006 accreditation and audit purposes. Please note, however, that the data may be for audit purpose by other inspectorate boards or in relation to BS 7799 and 7499 Information Security Audit. About this security screening, H&D Recruitment will carry out any searches. Contacting establishments and organizations named by me to check any or all the information supplied. I agree that this may include a search with a credit reference agency. I hereby expressly consent to such searches being carried out and where a record of such search or check being retained. I further authorize H&D Recruitment to take up a consumer information search with a credit reference agency. I am aware that the credit reference agency will keep a record of that search and may share that information with other credit reference agencies. By completing this application form, I consent to the transfer of my information to the Disclosure and Barring Service for a Disclosure Application. I confirm that the information that I have provided in support of this application is complete and true and understand that to knowingly make a false statement for this purpose is a criminal offence.</p>
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='input' type='text' label='This is to certify that I' name='screening_name' />
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='date' label='Date' name='screening_date_birth' />
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='input' type='text' label='Place of birth' name='screening_place_birth' />
-				</div>
-				<div className="col-md-12">
-					<p className='small'>Give approval for my personal information which I have supplied herein to be transferred to H&D Recruitment to assist in this security screening process and that the information I have provided may be screened for verification, accuracy and authenticity. In turn I also expressly consent to H&D Recruitment to return the result of such checks to The Client.</p>
-					<p className='small'>I hereby authorize the screening of my:</p>
-					<p className='small'>1. Address verification including 10-year residential history</p>
-					<p className='small'>2. County Court Judgments, bankruptcy and insolvency search</p>
-					<p className='small'>3. Obtaining references from referees</p>
-					<p className='small'>4. 10-year employment history checked to source</p>
-					<p className='small'>5. Outstanding, or unresolved criminal cases (CRB) only where necessary</p>
-					<p className='small'>I further declare that all the information I have supplied herein is, to the best of my knowledge and belief, correct. If I agree to obtain information or certificates which may be to substantiate any information. I acknowledge that misrepresentation, or failure to disclose material facts either during application or throughout employment may constitute grounds for immediate dismissal and/or legal action.</p>
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='input' type='text' label='Signature' name='approval_name1' />
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='input' type='text' label='Name' name='approval_name2' />
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='date' label='Date' name='approval_date' />
-				</div>
-
-				<div className="col-md-12">
-					<h5>Working Time Directive</h5>
-					<h4>The Working Time Regulations 1998</h4>
-					<p className='small'>These have been designed to implement the provisions of the 1993 EC Working Time Directive and set down regulations which allow restrictions on the number of average weekly hours worked by employee.</p>
-				</div>
-				<div className="col-md-12">
-					<h5>EMPLOYEE RIGHTS</h5>
-					<p className='small'>These have been designed to implement the provisions of the 1993 EC Working Time Directive and set down regulations which allow restrictions on the number of average weekly hours worked by employee</p>
-				</div>
-				<div className="col-md-12">
-					<h5>EMPLOYEE RIGHTS</h5>
-					<ul className='small'>
-						<li>A limit of 48 hours on the average weekly working time.</li>
-						<li>A minimum of four weeks (20 days) paid annual leave.</li>
-						<li>Entitlements to daily and weekly rest periods.</li>
-						<li>Provision to limit the working hours for night workers.</li>
-						<li>The right for health assessment for workers involved in night working.</li>
-						<li>Where the employee agrees to work more than 48 hours per week. The Employer is to provide compensatory rest peri</li>
-					</ul>
-				</div>
-				<div className="col-md-12">
-					<h5>FLEXIBILTY</h5>
-					<ul className='small'>
-						<li>To allow employers and employees to enter into agreement to allow for average working time in excess of 48 hours per week.</li>
-						<li>Workers engaged in security surveillance work (Security Guards & Caretakers), in providing services relating to reception, treatment, or care provided by hospitals, similar establishments, residential institutions, are exempt from the regulations governing rest periods and night work.</li>
-						<li>Entitlements to daily and weekly rest periods.</li>
-						<li>Employees who agree to work over 48 hours per week are entitled to compensatory rest periods.</li>
-					</ul>
-				</div>
-				<div className="col-md-12">
-					<h5>Declaration & Agreement</h5>
-					<p>I</p>
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='input' type='text' label='Name' name='agreement_name1' />
-				</div>
-				<div className="col-md-4">
-					<p className="strong">, have been made aware of my rights as an employee under the provisions of the Working Time Regulations 1998. I hereby voluntary agree to waive my rights under the Regulations to restrict my average working weekly hours to 48. I accept that my employer may therefore require me to work more than an average of 48 hours per week and understand that this Agreement should be read in conjunction with my Terms and Conditions of service. Furthermore, I agree to be bound by this Agreement unless I give my employer three months' notice in writing of my intentions to revoke this Agreement.</p>
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='input' type='text' label='Signature' name='agreement_name2' />
-				</div>
-				<div className="clearfix"></div>
-				<div className="col-md-4">
-					<FormikControl control='input' type='text' label='Employee Name' name='agreement_name3' />
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='input' type='text' label='Signature' name='agreement_name4' />
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='date' label='Date' name='agreement_date' />
-				</div>
-				<div className="col-md-12">
-					<h5>Subject Access Request Team Mandate</h5>
-					<p className='strong'>I the undersigned would like to request a 5 YEAR EMPLOYMENT HISTORY, with details of Employers, Earnings & National Insurance details under the terms of the Data Protection Act 1998.</p>
-					<p className='strong'>I would like this record issued directly to the third party detailed below</p>
-					<p className='small'>Your Company Name</p>
-					<p className='small yellow'>H&D Recruitment</p>
-					<p className='small'>Your Company Address</p>
-					<p className='small yellow'>4 Bell Parade Bell Road Hounslow TW3 3NU</p>
-					<p className='small'>Your Company Email</p>
-					<p className='small yellow'>info@handdservices.co.uk</p>
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='input' type='text' label='Name' name='request_name1' />
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='input' type='text' label='NI Number' name='request_ni_number' />
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='date' label='Date of Birth' name='request_date1' />
-				</div>
-				<div className="col-md-6">
-					<FormikControl control='input' type='text' label='Current Address' name='request_current_address' />
-				</div>
-				<div className="col-md-6">
-					<FormikControl control='input' type='text' label='Previous Address' name='request_previous_address' />
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='input' type='text' label='Signature' name='request_name2' />
-				</div>
-				<div className="col-md-4">
-					<FormikControl control='date' label='Date of Birth' name='request_date2' />
-				</div>
-
-				<div className="col-md-12">
-					<button type='button' className='btn1 btn2' onClick={() => props.prev(formProps.values)}><i className='fa fa-angle-left'></i> Back</button>
-					<button type='submit' className='float-end btn1'>Submit</button>
-				</div>
-				</div>{/*row*/}
-			</Form>
-		)}
-		</Formik>
-	);
+	<div className="col-md-12">
+		<button type='button' className='btn1 btn2' onClick={() => props.prev(formik.values)}><i className='fa fa-angle-left'></i> Back</button>
+		<button type='submit' className='float-end btn1'>Submit</button>
+	</div>
+</div>{/*row*/}
+</Form>
+)}
+</Formik>
+);
 }
 
 export default FormWaiter;

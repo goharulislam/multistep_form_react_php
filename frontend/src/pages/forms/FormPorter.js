@@ -179,7 +179,9 @@ const [data, setData] = useState({
 	request_current_address: '',
 	request_previous_address: '',
 	request_name2: '',
-	request_date2: ''
+	request_date2: '',
+	trainer_name1: 'Vlad, Rosou',
+	trainer_sign1: ''
 });
 
 const [currentStep, setCurrentStep] = useState(0);
@@ -228,6 +230,9 @@ axios.post('api_forms.php', formData);
 }
 
 const handleNextStep = (newData, final = false) => {
+	if(final === false){
+		window.scrollTo(0,0);
+	}
 	setData((prev) => ({...prev, ...newData}));
 	if(final){
 		makeRequest(newData)
@@ -237,6 +242,7 @@ const handleNextStep = (newData, final = false) => {
 };
 
 const handlePrevStep = (newData) => {
+	window.scrollTo(0,0);
 	setData((prev) => ({...prev, ...newData}));
 	setCurrentStep((prev) => prev - 1);
 };
@@ -350,16 +356,17 @@ return(
 		<div className="col-md-4">
 			<FormikControl control='input' type='text' label='Hotel assigned' name='hotel1' placeholder='To be filled by Admin' />
 		</div>
-		<div className="col-md-9">
+		<div className='clearfix'></div>
+		<div className="col-md-6">
 			<FormikControl control='checkbox_toggle_switch' label='Are you eligeable to work in the UK?' name='eligible_uk' />
 		</div>
-		<div className="col-md-3">
+		<div className="col-md-4 offset-md-2">
 			<FormikControl control='date' label='Permit Expiry Date' name='permit_expiry' />
 		</div>
-		<div className="col-md-9">
+		<div className="col-md-6">
 			<FormikControl control='checkbox_toggle_switch' label='Do you have a Passport?' name='passport' />
 		</div>
-		<div className="col-md-3">
+		<div className="col-md-4 offset-md-2">
 			<FormikControl control='date' label='Passport Expiry Date' name='passport_expiry' />
 		</div>
 		<div className="col-md-6">
@@ -672,10 +679,10 @@ const handleSubmit = (values) => {
 					<FormikControl control='input' type='text' label='Date' name='date5' />
 				</div>
 				<div className="col-md-4">
-					<FormikControl control='input' type='text' label="Trainer's Name" name='trainer_name' placeholder='To be filled by Admin' />
+					<FormikControl control='input' type='text' label="Trainer's Name" name='trainer_name1' disabled />
 				</div>
 				<div className="col-md-4">
-					<FormikControl control='input' type='text' label="Trainer's signature" name='trainer_sign' placeholder='To be filled by Admin' />
+					<FormikControl control='input' type='text' label="Trainer's signature" name='trainer_sign1' placeholder='To be filled by Admin' />
 				</div>
 
 				<div className="col-md-4">

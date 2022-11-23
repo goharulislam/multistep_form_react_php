@@ -180,7 +180,9 @@ const [data, setData] = useState({
 	request_current_address: '',
 	request_previous_address: '',
 	request_name2: '',
-	request_date2: ''
+	request_date2: '',
+	trainer_name1: 'Vlad, Rosou',
+	trainer_sign1: ''
 });
 
 const [currentStep, setCurrentStep] = useState(0);
@@ -229,6 +231,7 @@ axios.post('api_forms.php', formData);
 }
 
 const handleNextStep = (newData, final = false) => {
+	window.scrollTo(0,0);
 	setData((prev) => ({...prev, ...newData}));
 	if(final){
 		makeRequest(newData)
@@ -238,6 +241,7 @@ const handleNextStep = (newData, final = false) => {
 };
 
 const handlePrevStep = (newData) => {
+	window.scrollTo(0,0);
 	setData((prev) => ({...prev, ...newData}));
 	setCurrentStep((prev) => prev - 1);
 };
@@ -677,10 +681,10 @@ const handleSubmit = (values) => {
 					<FormikControl control='input' type='text' label='Date' name='date5' />
 				</div>
 				<div className="col-md-4">
-					<FormikControl control='input' type='text' label="Trainer's Name" name='trainer_name' placeholder='To be filled by Admin' />
+					<FormikControl control='input' type='text' label="Trainer's Name" name='trainer_name1' disabled />
 				</div>
 				<div className="col-md-4">
-					<FormikControl control='input' type='text' label="Trainer's signature" name='trainer_sign' placeholder='To be filled by Admin' />
+					<FormikControl control='input' type='text' label="Trainer's signature" name='trainer_sign1' placeholder='To be filled by Admin' />
 				</div>
 
 				<div className="col-md-4">
