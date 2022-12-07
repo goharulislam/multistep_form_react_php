@@ -1,7 +1,7 @@
 html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, label, input, textarea, p, blockquote, th, td, tr, table{margin:0; padding:0;}
 table{border-collapse:collapse; border-spacing:0;}
 fieldset, img{border:0;}
-address, caption, cite, code, dfn, em, strong, th, var{font-style:normal; font-weight:normal;}
+address, caption, cite, code, dfn, em, th, var{font-style:normal; font-weight:normal;}
 ol, ul, li{list-style:none; display:inline;}
 caption, th{text-align:left;}
 q:before, q:after{content:"";}
@@ -72,9 +72,10 @@ div.center{text-align:center;}
 .search{background-color:#f2f2f2;}
 .search h6{color:#0c4d9f;}
 .search p{color:#191918; font-size:14px;}
-.fc{margin-bottom:40px;}
+.fc{margin-bottom:30px;}
 label:after{content:"*";}
 label.switch:after{content:"";}
+label.no_asterisk:after{content:"";}
 input[type="file"]{background:none; background-color:rgba(234, 166, 54, 0.05); border:1px solid #FFC52D; border-radius:7px; padding:15px; margin-bottom:30px;}
 
 .slick1 .slick-prev:before, .slick-next:before{font-family:"FontAwesome"; font-size:20px; color:#666; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
@@ -120,7 +121,7 @@ form .declaration{font-size:16px; text-decoration:underline; margin-bottom:30px;
 form .declaration + .fc{float:right;}
 form .modal-dialog{max-width:70%;}
 
-form .main{/*display:block;*/ position:relative; margin-bottom:15px; cursor:pointer; width:100%;}
+form .main{/*display:block;*/ position:relative; cursor:pointer; width:100%;}
 form .main input[type=checkbox]{visibility:hidden; display:none;}
 /* Creating a custom checkbox based on demand */
 form .main .geekmark{position:absolute; top:0; right:0; height:30px; width:30px; border:1px solid #bbb;}
@@ -233,6 +234,9 @@ form .declaration1::-webkit-scrollbar-track{background-color:transparent;}
 /*MediaQuery*/
 @media(min-width:767px) and (max-width:5000px){
 
+}
+@media(min-width:1399px) and (max-width:9000px){
+.steps .steps-progress-bar li:after{left:-220px;}
 }
 @media(max-width:1280px){
 

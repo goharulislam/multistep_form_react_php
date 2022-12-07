@@ -8,50 +8,30 @@ function FormPorter(){
 const navigate = useNavigate();
 let formData = new FormData();
 const [data, setData] = useState({
-	first_name: '',
-	last_name: '',
-	home_address: '',
-	postal_code: '',
-	region: '',
-	city: '',
-	phone: '',
-	email: '',
-	gender: '',
-	marital_status: '',
-	date_birth: '',
-	place_birth: '',
-	country_of_birth: '',
-	sia_license: '',
-	sia_badge_no: '',
-	sia_badge_expiry: '',
+	function: 'create_porter',
+	uid: 'porter-'+Math.floor(Math.random()*99999)+100,
+	title: '',
+	first_name1: '',
+	last_name1: '',
+	phone1: '',
+	email1: '',
+	home_address1: '',
+	post_code1: '',
+	work_sought: 'Porter',
+	dob1: null,
+	ni_number: '',
+	hotel1: '',
+	eligible_uk: false,
+	permit_expiry: null,
+	passport: false,
+	passport_expiry: null,
 	bank_name: '',
-	bank_account_number: '',
 	sort_code: '',
-	bank_statement_date: '',
-	valid_passport: false,
-	uk_full_time: false,
-	brp: false,
-	criminal_convictions: false,
-	international_student: false,
-	own_vehicle: false,
-	driving_license: false,
-	driving_license_number: '',
-	driving_endorsements: false,
-	kin_name: '',
-	kin_phone: '',
-	kin_email: '',
-	kin_address: '',
-	kin_relationship: '',
-
-	university_address: '',
-	university_start_date: '',
-	university_finish_date: '',
-	college_address: '',
-	college_start_date: '',
-	college_finish_date: '',
-	school_address: '',
-	school_start_date: '',
-	school_finish_date: '',
+	account_number: '',
+	emergency_contact_name: '',
+	emergency_contact_relation: '',
+	emergency_contact_phone: '',
+	emergency_contact_address: '',
 	employment_history: [
 		{
 			company_name: '',
@@ -59,91 +39,10 @@ const [data, setData] = useState({
 			email: '',
 		},
 	],
-	changed_nationality: false,
-	changed_nationality_detail: '',
-	changed_surname: false,
-	changed_surname_detail: '',
-	current_address: '',
-	current_address_date: '',
-	address_history: [
-		{
-			house_number: '',
-			name: '',
-			street: '',
-			town: '',
-			country: '',
-			date_moved_in: '',
-			date_leaved_out: '',
-		},
-	],
-	self_employment: [
-		{
-			company_name: '',
-			company_address: '',
-			company_phone: '',
-			company_email: '',
-		},
-	],
-	gaps_employment: [
-		{
-			start_date: '',
-			end_date: '',
-			reason: '',
-		},
-	],
-	p1_full_name: '',
-	p1_address: '',
-	p1_phone: '',
-	p1_email: '',
-	p1_occupation: '',
-	p1_relationship: '',
-	p1_period: '',
-	p2_full_name: '',
-	p2_address: '',
-	p2_phone: '',
-	p2_email: '',
-	p2_occupation: '',
-	p2_relationship: '',
-	p2_period: '',
-	eligible_uk: '',
-	select_document: '',
-	rehab_eligible: false,
-	rehab_private: '',
-	rehab_confirm: '',
-	rehab_understand: '',
-	rehab_name: '',
-	rehab_print: '',
-	rehab_date: '',
-	ccj: false,
-	ccj_detail: '',
-	iva: false,
-	iva_detail: '',
-	bankrupt: false,
-	bankrupt_detail: '',
-	file_passport: {},
-	file_picture: {},
-	file_national_insurance_letter: {},
-	file_proof_address: {},
-	file_brp1: {},
-	file_brp2: {},
-	file_badge1: {},
-	file_badge2: {},
-	disclaimer_name: '',
-	disclaimer_date: '',
-	gdpr_name1: '',
-	gdpr_department: '',
-	gdpr_date1: '',
-	gdpr_date2: '',
-	gdpr_name2: '',
-	gdpr_name3: '',
-	gdpr_date3: '',
-	screening_name: '',
-	screening_date_birth: '',
-	screening_place_birth: '',
-	approval_name1: '',
-	approval_name2: '',
-	approval_date: '',
-
+	crime: false,
+	crime_detail: '',
+	sign1: '',
+	date1: '',
 	diabetes: false,
 	epilepsy: false,
 	blackouts: false,
@@ -151,7 +50,7 @@ const [data, setData] = useState({
 	moving: false,
 	looking: false,
 	outdoor: false,
-	enclosed: false,
+	enclosed1: false,
 	head_height: false,
 	eyesight: false,
 	lifting: false,
@@ -165,23 +64,41 @@ const [data, setData] = useState({
 	dizziness: false,
 	drugs: false,
 	alcohol: false,
-	hr_name1: '',
-	hr_name2: '',
-	hr_date: '',
-	agreement_name1: '',
-	agreement_name2: '',
-	agreement_name3: '',
-	agreement_name4: '',
-	agreement_date: '',
-	request_name1: '',
-	request_ni_number: '',
-	request_date1: '',
-	request_current_address: '',
-	request_previous_address: '',
-	request_name2: '',
-	request_date2: '',
+	sign2: '',
+	name2: '',
+	date2: null,
+	/*step2*/
+	first_name2: '',
+	surname2: '',
+	phone2: '',
+	home_address2: '',
+	hotel2: '',
+	report_to1: '',
+	start_date1: null,
+	start_time1: null,
+	job_role2: 'Porter',
+	hourly_rate2: '11',
+	dress1: 'BLACK POLO SHIRT, BLACK TROUSER, BLCAK SHOES',
+	medical: '',
+	pregnant: '',
+	emergency_name1: '',
+	emergency_number1: '',
+	emergency_address1: '',
+	sign3: '',
+	date3: null,
+	name3: '',
+	address3: '',
+	hotel3: 'To be filled by Admin',
+	rate: '11',
+	payment_date: null,
+	sign4: '',
+	date4: null,
+	name5: '',
+	agency1: 'H&D Recruitment',
+	sign5: '',
+	date5: null,
 	trainer_name1: 'Vlad, Rosou',
-	trainer_sign1: ''
+	trainer_sign1: '',
 });
 
 const [currentStep, setCurrentStep] = useState(0);
@@ -203,13 +120,13 @@ function formatDate(date){
 
 const makeRequest = (newData) => {
 //console.log('form submitted', newData);
-document.getElementById("whereToPrint").innerHTML = JSON.stringify(newData, null, 4);
+//document.getElementById("whereToPrint").innerHTML = JSON.stringify(newData, null, 4);
 
 Object.keys(newData).forEach(fieldName => {
-	if(fieldName === 'date_birth' || fieldName === 'sia_badge_expiry' || fieldName === 'bank_statement_date'){
+	if(fieldName === 'dob1'){
 		let d1 = formatDate(newData[fieldName]);
 		formData.append(fieldName, d1);
-	} else if (fieldName === 'employment_history' || fieldName === 'address_history' || fieldName === 'self_employment' || fieldName === 'gaps_employment'){
+	} else if (fieldName === 'employment_history'){
 		formData.append(fieldName, JSON.stringify(newData[fieldName]));
 	} else {
 		//console.log(fieldName, newData[fieldName]);
@@ -218,15 +135,14 @@ Object.keys(newData).forEach(fieldName => {
 
 });
 
-//document.getElementById("whereToPrint").innerHTML = JSON.stringify(formData, null, 4);
 /*
 	// V IMP CODE
 	for(var pair of formData.entries()){
-	console.log(pair[0]+ ', ' + pair[1]); 
-}
+		console.log(pair[0]+ ', ' + pair[1]); 
+	}
 */
 
-axios.post('api_forms.php', formData);
+axios.post('api_form_porter.php', formData);
 }
 
 const handleNextStep = (newData, final = false) => {
@@ -255,7 +171,7 @@ const steps = [
 return(
 	<section className='steps steps_two'>
 		<h3 className='float-start'>Form: Porter</h3>
-		<button className="btn1 btn2 float-end" onClick={() => navigate(-1)}>Back</button>
+		<button className="btn1 btn2 float-end" onClick={() => navigate('/')}>Back</button>
 		<div>
 			<ul className="steps-progress-bar">
 				<li className='active'></li>
@@ -270,42 +186,40 @@ return(
 );
 }
 
-const stepOneValidationSchema = Yup.object({
-	/*first_name: Yup.string().required().label('First Name'),
-	last_name: Yup.string().required().label('Last Name'),
-	gender: Yup.string().required().label('Gender'),
-	home_address: Yup.string().required().label('Home Address'),
-	postal_code: Yup.string().required().label('Postal Code'),
-	region: Yup.string().required().label('Region'),
-	city: Yup.string().required().label('City'),
-	phone: Yup.string().required().label('Phone'),
-	email: Yup.string().required().label('Email'),
-	
-	marital_status: Yup.string().required().label('Marital status'),
-	date_of_birth: Yup.string().required().label('Date of birth'),
-	place_of_birth: Yup.string().required().label('Palce of birth'),
-	country_of_birth: Yup.string().required().label('Country of birth'),
-	sia_license: Yup.string().required().label('SIA License'),
-	sia_badge_no: Yup.string().required().label('SIA Badge Number'),
-	sia_badge_expiry: Yup.string().required().label('SIA Badge Expiry'),
-	bank_name: Yup.string().required().label('Banke Name'),
-	bank_email: Yup.string().required().label('Bank Email'),
-	sort_code: Yup.string().required().label('Sort Code'),
-	bank_statement_date: Yup.string().required().label('Bank statement date'),
-	valid_passport: Yup.string().required().label('valid passort'),
-	uk_full_time: Yup.string().required().label('UK full time'),
-	brp: Yup.string().required().label('BRP'),
-	criminal_convictions: Yup.string().required().label('Criminal convictions'),
-	international_student: Yup.string().required().label('International student'),
-	own_vehicle: Yup.string().required().label('Own vehicle'),
-	driving_license: Yup.string().required().label('Driving license'),
-	driving_license_number: Yup.string().required().label('Driving license number'),
-	driving_endorsements: Yup.string().required().label('Driving endorsements'),
-	kin_name: Yup.string().required().label('KIN name'),
-	kin_phone: Yup.string().required().label('KIN phone'),
-	kin_email: Yup.string().required().label('KIN email'),
-	kin_address: Yup.string().required().label('KIN address'),
-	kin_relationship: Yup.string().required().label('KIN relationship'),*/
+const stepOneValidationSchema = Yup.object().shape({
+	title: Yup.string().required().label('Title'),
+	first_name1: Yup.string().required().label('First name'),
+	last_name1: Yup.string().required().label('Last name'),
+	phone1: Yup.string().required().label('Phone'),
+	email1: Yup.string().required().label('Email'),
+	home_address1: Yup.string().required().label('Address'),
+	post_code1: Yup.string().required().label('Post code'),
+	work_sought: Yup.string().required().label('Work sought'),
+	dob1: Yup.string().required().label('Birth date'),
+	ni_number: Yup.string().required().label('NI number'),
+	hotel1: Yup.string().required().label('Hotel'),
+	permit_expiry: Yup.string().required().label('Date'),
+	passport_expiry: Yup.string().required().label('Date'),
+	bank_name: Yup.string().required().label('Bank'),
+	sort_code: Yup.string().required().label('Sort code'),
+	account_number: Yup.string().required().label('Account Number'),
+	emergency_contact_name: Yup.string().required().label('Name'),
+	emergency_contact_relation: Yup.string().required().label('Relation'),
+	emergency_contact_phone: Yup.string().required().label('Phone'),
+	emergency_contact_address: Yup.string().required().label('Address'),
+	employment_history: Yup.array().of(
+		Yup.object().shape({
+			company_name: Yup.string().required(),
+			phone: Yup.string().required(),
+			email: Yup.string().email().required(),
+		})
+	),
+	crime_detail: Yup.string().required().label('Detail'),
+	sign1: Yup.string().required().label('Sign'),
+	date1: Yup.string().required().label('Date'),
+	sign2: Yup.string().required().label('Sign'),
+	name2: Yup.string().required().label('Name'),
+	date2: Yup.string().required().label('Date'),
 });
 
 const StepOne = (props) => {
@@ -345,7 +259,7 @@ return(
 			<FormikControl control='input' type='text' label='Post code' name='post_code1' />
 		</div>
 		<div className="col-md-4">
-			<FormikControl control='input' type='text' label='Work sought' name='work_sought' value='Porter' disabled />
+			<FormikControl control='input' type='text' label='Work sought' name='work_sought' disabled />
 		</div>
 		<div className="col-md-4">
 			<FormikControl control='date' label='Date of Birth' name='dob1' />
@@ -385,7 +299,7 @@ return(
 			<FormikControl control='input' type='text' label='Relation with emergency contact' name='emergency_contact_relation' />
 		</div>
 		<div className="col-md-6">
-			<FormikControl control='input' type='text' label='Emergency Contact Number' name='emergency_contact_number' />
+			<FormikControl control='input' type='text' label='Emergency Contact Number' name='emergency_contact_phone' />
 		</div>
 		<div className="col-md-6">
 			<FormikControl control='input' type='text' label='Emergency Contact Address' name='emergency_contact_address' />
@@ -413,7 +327,7 @@ return(
 								</div>
 							))}
 					<div className="col-md-12">
-                			<button type="button" className="float-end btn1" onClick={() => push({ company_name: '', job_title: '', job_started: '', job_finished: '', address: '', phone: '', email: '', reason_leaving: '', contact_employer: '' })}><i className='fa fa-plus'></i></button>
+                			<button type="button" className="float-end btn1" onClick={() => push({company_name: '', phone: '', email: ''})}><i className='fa fa-plus'></i></button>
 					</div></div>)}
 				</FieldArray>
 		<div className="col-md-12">
@@ -433,7 +347,7 @@ return(
 		</div>
 
 		<div className="col-md-12">
-			<h3>Medical Health Certification & Health Declaration</h3>
+			<h4>Medical Health Certification & Health Declaration</h4>
 			<p>To comply with the Health and Safety at Work Act 1974, H&D Recruitment Limited are obliged to ensure that the health and safety of our temporary workers remains our highest priority. If you are on working machines, or doing a task that could harm others if you are not medically fit, you could be held personally liable for not declaring this to the site where you are working and also to H&D Recruitment Ltd, your employing organization. Alertness and reasonable physical fitness are essential for duties which may interact with moving trains. It is, therefore, important to be accurate with your answers to this questionnaire, although trivial matters should be ignored (e.g. transient dizziness while gardening two years ago).</p>
 			<p className="bold">When you declare NO, you are accepting a degree of responsibility for your safety, and those of others who may come to harm in your work place.</p>
 		</div>
@@ -454,19 +368,19 @@ return(
 		</div>
 		<div className="col-md-12">
 			<FormikControl control='input' type='checkbox' label='Would you have difficulty in looking over either shoulder?' name='looking' />
-			<p className="float-start"></p>
 		</div>
 		<div className="col-md-12">
 			<FormikControl control='input' type='checkbox' label='Would you have difficulty working in out-door open areas?' name='outdoor' />
 		</div>
 		<div className="col-md-12">
-			<FormikControl control='input' type='checkbox' label='Would you have difficulty working in enclosed spaces?' name='enclosed' />
+			<FormikControl control='input' type='checkbox' label='Would you have difficulty working in enclosed spaces?' name='enclosed1' />
 		</div>
 		<div className="col-md-12">
 			<FormikControl control='input' type='checkbox' label='Would you have difficulty working above head height (e.g. using ladders or maintenance platforms)?' name='head_height' />
 		</div>
 		<div className="col-md-12">
-			<FormikControl control='input' type='checkbox' label='Do you have any difficulty with your eyesight (other than the wearing of glasses or contact lenses where )? E.g. Color blind.' name='eyesight' />
+			<FormikControl control='input' type='checkbox' label='Do you have any difficulty with your eyesight?' name='eyesight' />
+			<p style={{margin:'-35px 0 30px'}}>(other than the wearing of glasses or contact lenses where required)? E.g. Color blind.</p>
 		</div>
 		<div className="col-md-12">
 			<FormikControl control='input' type='checkbox' label='Are you capable of repetitive lifting as for the employment?' name='lifting' />
@@ -475,7 +389,7 @@ return(
 			<FormikControl control='input' type='checkbox' label='Have you ever had a serious accident or operation?' name='accident' />
 		</div>
 		<div className="col-md-12">
-			<FormikControl control='input' type='checkbox' label='Do you have / ever suffered from Back/Neck problems?' name='back' />
+			<FormikControl control='input' type='checkbox' label='Do you have/ever suffered from Back/Neck problems?' name='back' />
 		</div>
 		<div className="col-md-12">
 			<FormikControl control='input' type='checkbox' label='Would being on your feet all day cause you a problem?' name='feet' />
@@ -487,7 +401,7 @@ return(
 			<FormikControl control='input' type='checkbox' label='Do you have High/low blood pressure?' name='bp' />
 		</div>
 		<div className="col-md-12">
-			<FormikControl control='input' type='checkbox' label='Have you have / ever had heart problems?' name='heart' />
+			<FormikControl control='input' type='checkbox' label='Have you have/ever had heart problems?' name='heart' />
 		</div>
 		<div className="col-md-12">
 			<FormikControl control='input' type='checkbox' label='Do you have any difficulty with your hearing?' name='hearing' />
@@ -527,10 +441,38 @@ return(
 }
 
 const stepTwoValidationSchema = Yup.object({
-	/*email: Yup.string().required().email().label('Email'),
-	password: Yup.string().required().label('Password'),
-	university_start_date: Yup.string().required(),
-	university_finish_date: Yup.string().required(),*/
+	first_name2: Yup.string().required().label('Name'),
+	surname2: Yup.string().required().label('Surname'),
+	phone2: Yup.string().required().label('Last name'),
+	home_address2: Yup.string().required().label('Phone'),
+	hotel2: Yup.string().required().label('Email'),
+	report_to1: Yup.string().required().label('Address'),
+	start_date1: Yup.string().required().label('Post code'),
+	start_time1: Yup.string().required().label('Work sought'),
+	job_role2: Yup.string().required().label('Birth date'),
+	hourly_rate2: Yup.string().required().label('NI number'),
+	dress1: Yup.string().required().label('Hotel'),
+	medical: Yup.string().required().label('Date'),
+	pregnant: Yup.string().required().label('Date'),
+	emergency_name1: Yup.string().required().label('Bank'),
+	emergency_number1: Yup.string().required().label('Sort code'),
+	emergency_address1: Yup.string().required().label('Account Number'),
+	sign3: Yup.string().required().label('Name'),
+	date3: Yup.string().required().label('Relation'),
+	name3: Yup.string().required().label('Phone'),
+	address3: Yup.string().required().label('Address'),
+	hotel3: Yup.string().required().label('Detail'),
+	rate: Yup.string().required().label('Sign'),
+	payment_date: Yup.string().required().label('Date'),
+	sign4: Yup.string().required().label('Sign'),
+	date4: Yup.string().required().label('Name'),
+	name5: Yup.string().required().label('Date'),
+	agency1: Yup.string().required().label('Date'),
+	sign5: Yup.string().required().label('Date'),
+	date5: Yup.string().required().label('Date'),
+	trainer_name1: Yup.string().required().label('Date'),
+	trainer_sign1: Yup.string().required().label('Date'),
+
 	changed_nationality: Yup.boolean(),
 	changed_nationality_detail: Yup.string().when('changed_nationality', {
         is: (value) => value === true,
@@ -586,16 +528,16 @@ const handleSubmit = (values) => {
 					<FormikControl control='input' type='text' label='Job role' name='job_role2' placeholder='Porter' disabled />
 				</div>
 				<div className="col-md-2">
-					<FormikControl control='input' type='text' label='Hourly rate' name='hourly_rate2' placeholder='11' />
+					<FormikControl control='input' type='text' label='Hourly rate' name='hourly_rate2' disabled />
 				</div>
 				<div className="col-md-8">
-					<FormikControl control='input' type='text' label='Uniform' name='dress1' placeholder='BLACK POLO SHIRT, BLACK TROUSER, BLACK SHOES' disabled />
+					<FormikControl control='input' type='text' label='Uniform' name='dress1' disabled />
 				</div>
 				<div className="col-md-12">
-					<FormikControl control='input' type='text' label='Medical History and Allergies' name='medical2' />
+					<FormikControl control='input' type='text' label='Medical History and Allergies' name='medical' />
 				</div>
 				<div className="col-md-12">
-					<FormikControl control='input' type='checkbox' label='Are you pregnant (if applicable)?' name='pregnant2' />
+					<FormikControl control='input' type='checkbox' label='Are you pregnant (if applicable)?' name='pregnant' />
 				</div>
 				<div className="col-md-4">
 					<FormikControl control='input' type='text' label='Emergency Contact Name' name='emergency_name1' />
@@ -610,7 +552,7 @@ const handleSubmit = (values) => {
 					<FormikControl control='input' type='text' label='Signature' name='sign3' />
 				</div>
 				<div className="col-md-4">
-					<FormikControl control='input' type='text' label='Date' name='date3' />
+					<FormikControl control='date' label='Date' name='date3' />
 				</div>
 
 				<div className="col-md-12">
@@ -623,7 +565,7 @@ const handleSubmit = (values) => {
 					<FormikControl control='input' type='text' label='Address' name='address3' />
 				</div>
 				<div className="col-md-8">
-					<FormikControl control='input' type='text' label='Designated hotel' name='hotel3' placeholder='To be filled by Admin' />
+					<FormikControl control='input' type='text' label='Designated hotel' name='hotel3' disabled />
 				</div>
 				<div className="col-md-4">
 					<FormikControl control='input' type='text' label='Hourly rate' name='rate' placeholder='11' disabled />
@@ -670,13 +612,13 @@ const handleSubmit = (values) => {
 					<FormikControl control='input' type='text' label='Print name' name='name5' />
 				</div>
 				<div className="col-md-4">
-					<FormikControl control='input' type='text' label='Agency' name='agency1' placeholder='H&D Recruitment' disabled />
+					<FormikControl control='input' type='text' label='Agency' name='agency1' disabled />
 				</div>
 				<div className="col-md-4">
 					<FormikControl control='input' type='text' label='Signature' name='sign5' />
 				</div>
 				<div className="col-md-4">
-					<FormikControl control='input' type='text' label='Date' name='date5' />
+					<FormikControl control='date' label='Date' name='date5' />
 				</div>
 				<div className="col-md-4">
 					<FormikControl control='input' type='text' label="Trainer's Name" name='trainer_name1' disabled />

@@ -178,7 +178,7 @@ function formatDate(date){
 
 const makeRequest = (newData) => {
 //console.log('form submitted', newData);
-document.getElementById("whereToPrint").innerHTML = JSON.stringify(newData, null, 4);
+//document.getElementById("whereToPrint").innerHTML = JSON.stringify(newData, null, 4);
 
 Object.keys(newData).forEach(fieldName => {
 	if(fieldName === 'date_birth' || fieldName === 'sia_badge_expiry' || fieldName === 'bank_statement_date'){
@@ -193,15 +193,14 @@ Object.keys(newData).forEach(fieldName => {
 
 });
 
-//document.getElementById("whereToPrint").innerHTML = JSON.stringify(formData, null, 4);
 /*
 	// V IMP CODE
 	for(var pair of formData.entries()){
-	console.log(pair[0]+ ', ' + pair[1]); 
-}
+		console.log(pair[0]+ ', ' + pair[1]); 
+	}
 */
 
-axios.post('api_forms.php', formData);
+axios.post('api_form_siadoorsupervisor.php', formData);
 }
 
 const handleNextStep = (newData, final = false) => {
@@ -947,7 +946,8 @@ return(
 	<FormikControl control='input' type='checkbox' label='Would you have difficulty working above head height (e.g. using ladders or maintenance platforms)?' name='head_height' />
 </div>
 <div className="col-md-12">
-	<FormikControl control='input' type='checkbox' label='Do you have any difficulty with your eyesight (other than the wearing of glasses or contact lenses where )? E.g. Color blind.' name='eyesight' />
+	<FormikControl control='input' type='checkbox' label='Do you have any difficulty with your eyesight?' name='eyesight' />
+	<p style={{margin:'-35px 0 30px'}}>(other than the wearing of glasses or contact lenses where required)? E.g. Color blind.</p>
 </div>
 <div className="col-md-12">
 	<FormikControl control='input' type='checkbox' label='Are you capable of repetitive lifting as for the employment?' name='lifting' />
@@ -956,7 +956,7 @@ return(
 	<FormikControl control='input' type='checkbox' label='Have you ever had a serious accident or operation?' name='accident' />
 </div>
 <div className="col-md-12">
-	<FormikControl control='input' type='checkbox' label='Do you have / ever suffered from Back/Neck problems?' name='back' />
+	<FormikControl control='input' type='checkbox' label='Do you have/ever suffered from Back/Neck problems?' name='back' />
 </div>
 <div className="col-md-12">
 	<FormikControl control='input' type='checkbox' label='Would being on your feet all day cause you a problem?' name='feet' />
@@ -968,7 +968,7 @@ return(
 	<FormikControl control='input' type='checkbox' label='Do you have High/low blood pressure?' name='bp' />
 </div>
 <div className="col-md-12">
-	<FormikControl control='input' type='checkbox' label='Have you have / ever had heart problems?' name='heart' />
+	<FormikControl control='input' type='checkbox' label='Have you have/ever had heart problems?' name='heart' />
 </div>
 <div className="col-md-12">
 	<FormikControl control='input' type='checkbox' label='Do you have any difficulty with your hearing?' name='hearing' />
@@ -1148,7 +1148,7 @@ useEffect(()=>{
 		if(contentHeight <= scrollTop) // modified
 		{
 			// Now this is called when scroll end!
-			console.log('declaration1 scroll reaches bottom.');
+			//console.log('declaration1 scroll reaches bottom.');
 			setD(true);
 		}
 	},
