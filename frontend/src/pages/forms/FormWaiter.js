@@ -219,7 +219,7 @@ return(
 );
 }
 
-const stepOneValidationSchema = Yup.object({
+const stepOneValidationSchema = Yup.object().shape({
 /*first_name1: Yup.string().required().label('First Name'),
 last_name1: Yup.string().required().label('Last Name'),
 gender: Yup.string().required().label('Gender'),
@@ -469,7 +469,7 @@ return(
 );
 }
 
-const stepTwoValidationSchema = Yup.object({
+const stepTwoValidationSchema = Yup.object().shape({
 	/*email: Yup.string().required().email().label('Email'),
 	password: Yup.string().required().label('Password'),
 	university_start_date: Yup.string().required(),
@@ -641,7 +641,7 @@ return(
 );
 }
 
-const stepThreeValidationSchema = Yup.object({
+const stepThreeValidationSchema = Yup.object().shape({
 	/*email: Yup.string().required().email().label('Email'),
 	password: Yup.string().required().label('Password'),
 	university_start_date: Yup.string().required(),
@@ -752,7 +752,7 @@ return(
 );
 }
 
-const stepFourValidationSchema = Yup.object({
+const stepFourValidationSchema = Yup.object().shape({
 	/*email: Yup.string().required().email().label('Email'),
 	password: Yup.string().required().label('Password'),
 	university_start_date: Yup.string().required(),
@@ -830,11 +830,8 @@ return(
 );
 }
 
-const stepFiveValidationSchema = Yup.object({
-	/*email: Yup.string().required().email().label('Email'),
-	password: Yup.string().required().label('Password'),
-	university_start_date: Yup.string().required(),
-	university_finish_date: Yup.string().required(),*/
+const stepFiveValidationSchema = Yup.object().shape({
+	declaration1: Yup.boolean().oneOf([true],'Scroll down the above text to accept.'),
 });
 
 const StepFive = (props) => {
@@ -854,7 +851,7 @@ useEffect(()=>{
 		if(contentHeight <= scrollTop) // modified
 		{
 			// Now this is called when scroll end!
-			console.log('declaration1 scroll reaches bottom.');
+			// console.log('declaration1 scroll reaches bottom.');
 			setD(true);
 		}
 	},

@@ -444,7 +444,7 @@ return(
 );
 }
 
-const stepTwoValidationSchema = Yup.object({
+const stepTwoValidationSchema = Yup.object().shape({
 /*	first_name2: Yup.string().required().label('First name'),
 	last_name2: Yup.string().required().label('Last Name'),
 	phone2: Yup.string().required().label('Phone'),

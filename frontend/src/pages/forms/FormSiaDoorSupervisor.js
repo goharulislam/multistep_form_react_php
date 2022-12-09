@@ -27,7 +27,7 @@ const [data, setData] = useState({
 	email: '',
 	gender: '',
 	marital_status: '',
-	date_birth: null,
+	date_birth: '',
 	place_birth: '',
 	country_birth: '',
 	sia_license: '',
@@ -35,8 +35,9 @@ const [data, setData] = useState({
 	sia_badge_expiry: '',
 	bank_name: '',
 	bank_account_number: '',
+	bank_email: '',
 	sort_code: '',
-	bank_statement_date: null,
+	bank_statement_date: '',
 	valid_passport: false,
 	uk_full_time: false,
 	brp: false,
@@ -51,16 +52,16 @@ const [data, setData] = useState({
 	kin_email: '',
 	kin_address: '',
 	kin_relationship: '',
-	/*step 2*/
+	/*step2*/
 	university_address: '',
-	university_start_date: null,
-	university_finish_date: null,
+	university_start_date: '',
+	university_finish_date: '',
 	college_address: '',
-	college_start_date: null,
-	college_finish_date: null,
+	college_start_date: '',
+	college_finish_date: '',
 	school_address: '',
-	school_start_date: null,
-	school_finish_date: null,
+	school_start_date: '',
+	school_finish_date: '',
 	employment_history: [{
 		company_name: '',
 		job_title: '',
@@ -74,19 +75,19 @@ const [data, setData] = useState({
 	}],
 	gaps_employment: [{
 		reason: '',
-		start_date: null,
-		end_date: null,
+		start_date: '',
+		end_date: '',
 	}],
 	changed_nationality: false,
 	changed_nationality_detail: '',
 	changed_surname: false,
 	changed_surname_detail: '',
 	current_address: '',
-	current_address_date: null,
+	current_address_date: '',
 	address_history: [{
 		previous_address: '',
-		date_moved_in: null,
-		date_leaved_out: null,
+		date_moved_in: '',
+		date_leaved_out: '',
 	}],
 	self_employment: [{
 		company_name: '',
@@ -108,7 +109,7 @@ const [data, setData] = useState({
 	p2_occupation: '',
 	p2_relationship: '',
 	p2_period: '',
-	/*step 3*/
+	/*step3*/
 	eligible_uk: false,
 	uk_document: '',
 	rehab_eligible: false,
@@ -117,14 +118,14 @@ const [data, setData] = useState({
 	rehab_understand: '',
 	rehab_name: '',
 	rehab_print: '',
-	rehab_date: null,
+	rehab_date: '',
 	ccj: false,
 	ccj_detail: '',
 	iva: false,
 	iva_detail: '',
 	bankrupt: false,
 	bankrupt_detail: '',
-	/*step 4*/
+	/*step4*/
 	diabetes: false,
 	epilepsy: false,
 	blackouts: false,
@@ -148,8 +149,8 @@ const [data, setData] = useState({
 	alcohol: false,
 	hr_name1: '',
 	hr_name2: '',
-	hr_date: null,
-	/*step 5*/
+	hr_date: '',
+	/*step5*/
 	file_passport: '',
 	file_picture: '',
 	file_national_insurance_letter: '',
@@ -158,7 +159,7 @@ const [data, setData] = useState({
 	file_brp2: '',
 	file_badge1: '',
 	file_badge2: '',
-	/*step 6*/
+	/*step6*/
 	declaration1: false,
 });
 
@@ -190,7 +191,6 @@ Object.keys(newData).forEach(fieldName => {
 		//console.log(fieldName, newData[fieldName]);
 		formData.append(fieldName, newData[fieldName]);
 	}
-
 });
 
 /*
@@ -253,25 +253,26 @@ return(
 );
 }
 
-const stepOneValidationSchema = Yup.object({
-	/*first_name: Yup.string().required().label('First Name'),
-	last_name: Yup.string().required().label('Last Name'),
-	gender: Yup.string().required().label('Gender'),
-	home_address: Yup.string().required().label('Home Address'),
-	postal_code: Yup.string().required().label('Postal Code'),
+const stepOneValidationSchema = Yup.object().shape({
+	/*first_name: Yup.string().required().label('First name'),
+	last_name: Yup.string().required().label('Last name'),
+	home_address: Yup.string().required().label('Home address'),
+	postal_code: Yup.string().required().label('Postal code'),
 	region: Yup.string().required().label('Region'),
 	city: Yup.string().required().label('City'),
 	phone: Yup.string().required().label('Phone'),
 	email: Yup.string().email().required().label('Email'),
+	gender: Yup.string().required().label('Gender'),
 	marital_status: Yup.string().required().label('Marital status'),
-	date_of_birth: Yup.string().required().label('Date of birth'),
-	place_of_birth: Yup.string().required().label('Palce of birth'),
-	country_of_birth: Yup.string().required().label('Country of birth'),
+	date_birth: Yup.string().required().label('Birth date'),
+	place_birth: Yup.string().required().label('Birth palce'),
+	country_birth: Yup.string().required().label('Birth country'),
 	sia_license: Yup.string().required().label('SIA License'),
-	sia_badge_number: Yup.string().required().label('SIA Badge Number'),
-	sia_badge_expiry: Yup.string().required().label('SIA Badge Expiry'),
-	bank_name: Yup.string().required().label('Banke Name'),
-	bank_email: Yup.string().required().label('Bank Email'),
+	sia_badge_number: Yup.string().required().label('SIA Badge number'),
+	sia_badge_expiry: Yup.string().required().label('SIA Badge expiry'),
+	bank_name: Yup.string().required().label('Bank name'),
+	bank_account_number: Yup.string().required().label('Account number'),
+	bank_email: Yup.string().required().label('Bank email'),
 	sort_code: Yup.string().required().label('Sort Code'),
 	bank_statement_date: Yup.string().required().label('Bank statement date'),
 	valid_passport: Yup.string().required().label('valid passort'),
@@ -299,207 +300,197 @@ const handleSubmit = (values) => {
 }
 
 return(
-	<Formik initialValues={props.data} validationSchema={stepOneValidationSchema} onSubmit={handleSubmit}>
-	{formik => {
-		console.log('formik', formik)
-		return(
-	<Form>
-		<h4>Application Information</h4>
-		<div className="row">
-		<div className="col-md-4">
-			<FormikControl control='input' type='text' label='First Name' name='first_name' placeholder='John' />
-		</div>
-		<div className="col-md-4">
-			<FormikControl control='input' type='text' label='Last Name' name='last_name' placeholder='Smith' />
-		</div>
-		<div className="col-md-12">
-			<FormikControl control='input' type='text' label='Home Address' name='home_address' />
-		</div>
-		<div className="col-md-4">
-			<FormikControl control='input' type='text' label='Postal Code' name='postal_code' />
-		</div>
-		<div className="col-md-4">
-			<FormikControl control='input' type='text' label='Region' name='region' />
-		</div>
-		<div className="col-md-4">
-			<FormikControl control='input' type='text' label='City/Town' name='city' />
-		</div>
-		<div className="col-md-3">
-			<FormikControl control='input' type='text' label='Phone' name='phone' />
-		</div>
-		<div className="col-md-3">
-			<FormikControl control='input' type='text' label='Email' name='email' />
-		</div>
-		<div className="col-md-3">
-			<FormikControl control='select' label='Gender' name='gender' options={gender} />
-		</div>
-		<div className="col-md-3">
-			<FormikControl control='select' label='Marital Status' name='marital_status' options={marital_status} />
-		</div>
-		<div className="col-md-4">
-			<FormikControl control='date' label='Date of Birth' name='date_birth' />
-		</div>
-		<div className="col-md-4">
-			<FormikControl control='input' type='text' label='Place of Birth' name='place_birth' />
-		</div>
-		<div className="col-md-4">
-			<FormikControl control='select' label='Country of Birth' name='country_birth' options={countries} />
-		</div>
-		<div className="col-md-4">
-			<FormikControl control='input' type='text' label='SIA License' name='sia_license' />
-		</div>
-		<div className="col-md-4">
-			<FormikControl control='input' type='text' label='SIA Badge Number' name='sia_badge_number' />
-		</div>
-		<div className="col-md-4">
-			<FormikControl control='date' label='SIA Badge Expiry' name='sia_badge_expiry' />
-		</div>
+<Formik initialValues={props.data} validationSchema={stepOneValidationSchema} onSubmit={handleSubmit}>
+{formik => {
+console.log('formik', formik)
+return(
+<Form>
+<div className="row">
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='First Name' name='first_name' placeholder='John' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Last Name' name='last_name' placeholder='Smith' />
+	</div>
+	<div className="col-md-12">
+		<FormikControl control='input' type='text' label='Home Address' name='home_address' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Postal Code' name='postal_code' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Region' name='region' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='City/Town' name='city' />
+	</div>
+	<div className="col-md-3">
+		<FormikControl control='input' type='text' label='Phone' name='phone' />
+	</div>
+	<div className="col-md-3">
+		<FormikControl control='input' type='text' label='Email' name='email' />
+	</div>
+	<div className="col-md-3">
+		<FormikControl control='select' label='Gender' name='gender' options={gender} />
+	</div>
+	<div className="col-md-3">
+		<FormikControl control='select' label='Marital Status' name='marital_status' options={marital_status} />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='date' label='Date of Birth' name='date_birth' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Place of Birth' name='place_birth' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='select' label='Country of Birth' name='country_birth' options={countries} />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='SIA License' name='sia_license' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='SIA Badge Number' name='sia_badge_number' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='date' label='SIA Badge Expiry' name='sia_badge_expiry' />
+	</div>
 
-		<div className="col-md-12">
-			<h4>Bank Information</h4>
-			<div className="alert" role="alert">
-				<i className="fa fa-info-circle"></i><p>Bank Statement Should not be older than 3-Months!</p>
-			</div>
+	<div className="col-md-12">
+		<h4>Bank Information</h4>
+		<div className="alert" role="alert">
+			<i className="fa fa-info-circle"></i><p>Bank Statement Should not be older than 3-Months!</p>
 		</div>
-		<div className="col-md-3">
-			<FormikControl control='input' type='text' label='Bank Name' name='bank_name' />
-		</div>
-		<div className="col-md-3">
-			<FormikControl control='input' type='text' label='Bank Account Number' name='bank_account_number' />
-		</div>
-		<div className="col-md-3">
-			<FormikControl control='input' type='text' label='Sort Code' name='sort_code' />
-		</div>
-		<div className="col-md-3">
-			<FormikControl control='date' label='Bank Statement Date' name='bank_statement_date' />
-		</div>
-		<div className="col-md-12">
-			<FormikControl control='input' type='checkbox' label='Do you have a valid Passport?' name='valid_passport' />
-		</div>
-		<div className="col-md-12">
-			<FormikControl control='input' type='checkbox' label='Are you eligible to work in UK Full Time?' name='uk_full_time' />
-		</div>
-		<div className="col-md-12">
-			<FormikControl control='input' type='checkbox' label='Do you have a valid Biometric Residence Permit (BRP)?' name='brp' />
-		</div>
-		<div className="col-md-12">
-			<FormikControl control='input' type='checkbox' label='Do you have any unspent criminal convictions?' name='criminal_convictions' />
-		</div>
-		<div className="col-md-12">
-			<FormikControl control='input' type='checkbox' label='Are you an International Student?' name='international_student' />
-		</div>
-		<div className="col-md-12">
-			<FormikControl control='input' type='checkbox' label='Do you have a own Vehicle?' name='own_vehicle' />
-		</div>
-		<div className="col-md-12">
-			<FormikControl control='input' type='checkbox' label='Do you have a Full UK Driving License?' name='driving_license' />
-		</div>
-		<div className="col-md-6">
-			<FormikControl control='input' type='text' label='Driving License Number' name='driving_license_number' />
-		</div>
-		<div className="col-md-12">
-			<FormikControl control='input' type='checkbox' label='Do you gave any Driving Endorsements?' name='driving_endorsements' />
-		</div>
+	</div>
+	<div className="col-md-3">
+		<FormikControl control='input' type='text' label='Bank Name' name='bank_name' />
+	</div>
+	<div className="col-md-3">
+		<FormikControl control='input' type='text' label='Bank Account Number' name='bank_account_number' />
+	</div>
+	<div className="col-md-3">
+		<FormikControl control='input' type='text' label='Sort Code' name='sort_code' />
+	</div>
+	<div className="col-md-3">
+		<FormikControl control='date' label='Bank Statement Date' name='bank_statement_date' />
+	</div>
+	<div className="col-md-12">
+		<FormikControl control='input' type='checkbox' label='Do you have a valid Passport?' name='valid_passport' />
+	</div>
+	<div className="col-md-12">
+		<FormikControl control='input' type='checkbox' label='Are you eligible to work in UK Full Time?' name='uk_full_time' />
+	</div>
+	<div className="col-md-12">
+		<FormikControl control='input' type='checkbox' label='Do you have a valid Biometric Residence Permit (BRP)?' name='brp' />
+	</div>
+	<div className="col-md-12">
+		<FormikControl control='input' type='checkbox' label='Do you have any unspent criminal convictions?' name='criminal_convictions' />
+	</div>
+	<div className="col-md-12">
+		<FormikControl control='input' type='checkbox' label='Are you an International Student?' name='international_student' />
+	</div>
+	<div className="col-md-12">
+		<FormikControl control='input' type='checkbox' label='Do you have a own Vehicle?' name='own_vehicle' />
+	</div>
+	<div className="col-md-12">
+		<FormikControl control='input' type='checkbox' label='Do you have a Full UK Driving License?' name='driving_license' />
+	</div>
+	<div className="col-md-6">
+		<FormikControl control='input' type='text' label='Driving License Number' name='driving_license_number' />
+	</div>
+	<div className="col-md-12">
+		<FormikControl control='input' type='checkbox' label='Do you gave any Driving Endorsements?' name='driving_endorsements' />
+	</div>
 
-		<div className="col-md-12">
-			<h4>Emergency/KIN Details</h4>
-		</div>
-		<div className="col-md-4">
-			<FormikControl control='input' type='text' label='Name' name='kin_name' />
-		</div>
-		<div className="col-md-4">
-			<FormikControl control='input' type='text' label='Phone' name='kin_phone' />
-		</div>
-		<div className="col-md-4">
-			<FormikControl control='input' type='text' label='Email' name='kin_email' />
-		</div>
-		<div className="col-md-4">
-			<FormikControl control='input' type='text' label='Address' name='kin_address' />
-		</div>
-		<div className="col-md-4">
-			<FormikControl control='input' type='text' label='Relationship' name='kin_relationship' placeholder='Spouse' />
-		</div>
+	<div className="col-md-12">
+		<h4>Emergency/KIN Details</h4>
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Name' name='kin_name' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Phone' name='kin_phone' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Email' name='kin_email' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Address' name='kin_address' />
+	</div>
+	<div className="col-md-4">
+		<FormikControl control='input' type='text' label='Relationship' name='kin_relationship' placeholder='Spouse' />
+	</div>
 
-		<div className="col-md-12">
-			<p className='float-start error' style={{display:!(formik.isValid) ? 'block' : 'none'}}>Fill required field(s).</p>
-			<button type="submit" className="float-end btn1" disabled={!(formik.isValid)}>Next <i className='fa fa-angle-right'></i></button>
-		</div>
-	</div>{/*row*/}
-	</Form>
-	)}}
+	<div className="col-md-12">
+		<p className='float-start error' style={{display:!(formik.isValid) ? 'block' : 'none'}}>Fill required field(s).</p>
+		<button type="submit" className="float-end btn1" disabled={!(formik.isValid)}>Next <i className='fa fa-angle-right'></i></button>
+	</div>
+</div>{/*row*/}
+</Form>
+)}}
 </Formik>
 );
 }
 
 const stepTwoValidationSchema = Yup.object().shape({
-	/*
-	university_address: Yup.string().required().label(''),
-	university_start_date: Yup.string().required().label(''),
-	university_finish_date: Yup.string().required().label(''),
-	college_address: Yup.string().required().label(''),
-	college_start_date: Yup.string().required().label(''),
-	college_finish_date: Yup.string().required().label(''),
-	school_address: Yup.string().required().label(''),
-	school_start_date: Yup.string().required().label(''),
-	school_finish_date: Yup.string().required().label(''),
+	/*university_address: Yup.string().required().label('address'),
+	university_start_date: Yup.string().required().label('date'),
+	university_finish_date: Yup.string().required().label('date'),
+	college_address: Yup.string().required().label('address'),
+	college_start_date: Yup.string().required().label('date'),
+	college_finish_date: Yup.string().required().label('date'),
+	school_address: Yup.string().required().label('address'),
+	school_start_date: Yup.string().required().label('date'),
+	school_finish_date: Yup.string().required().label('date'),
 	employment_history: Yup.array().of(
 		Yup.object().shape({
-			company_name: Yup.string().required(),
-			job_title: Yup.string().required(),
-			job_started: Yup.string().required(),
-			job_finished: Yup.string().required(),
-			address: Yup.string().required(),
-			phone: Yup.string().required(),
-			email: Yup.string().email().required().label('Email'),
-			reason_leaving: Yup.string().required(),
-			contact_employer: Yup.string().required(),
-		})
-	),
+		company_name: Yup.string().required().label('name'),
+		job_title: Yup.string().required().label('title'),
+		job_started: Yup.string().required().label('date'),
+		job_finished: Yup.string().required().label('date'),
+		address: Yup.string().required().label('address'),
+		phone: Yup.string().required().label('phone'),
+		email: Yup.string().required().label('email'),
+		reason_leaving: Yup.string().required().label('reason'),
+	})),
 	gaps_employment: Yup.array().of(
 		Yup.object().shape({
-			reason: Yup.string().required(),
-			start_date: Yup.string().required(),
-			end_date: Yup.string().required(),
-		})
-	),
-	changed_nationality: Yup.boolean(),
-	changed_nationality_detail: Yup.string().when('changed_nationality', {
-        is: (value) => value === true,
-        then: Yup.string().required('Details are required.')
-    }),
-	changed_surname: Yup.boolean(),
-	changed_surname_detail: Yup.string().when('changed_surname', {
-        is: (value) => value === true,
-        then: Yup.string().required('Details are required.')
-    }),
+			reason: Yup.string().required().label(''),
+			start_date: Yup.string().required().label(''),
+			end_date: Yup.string().required().label(''),
+		})),
+	changed_nationality: false,
+	changed_nationality_detail: Yup.string().required().label(''),
+	changed_surname: false,
+	changed_surname_detail: Yup.string().required().label(''),
 	current_address: Yup.string().required().label(''),
 	current_address_date: Yup.string().required().label(''),
-	address_history: [{
-		previous_address: '',
-		date_moved_in: null,
-		date_leaved_out: null,
-	}],
-	self_employment: [{
-		company_name: '',
-		company_address: '',
-		company_phone: '',
-		company_email: '',
-	}],
+	address_history: Yup.array().of(
+		Yup.object().shape({
+			previous_address: Yup.string().required().label(''),
+			date_moved_in: Yup.string().required().label(''),
+			date_leaved_out: Yup.string().required().label(''),
+		})),
+	self_employment: Yup.array().of(
+		Yup.object().shape({
+			company_name: Yup.string().required().label(''),
+			company_address: Yup.string().required().label(''),
+			company_phone: Yup.string().required().label(''),
+			company_email: Yup.string().required().label(''),
+		})),
 	p1_full_name: Yup.string().required().label(''),
 	p1_address: Yup.string().required().label(''),
 	p1_phone: Yup.string().required().label(''),
-	p1_email: Yup.string().required().email().label(''),
+	p1_email: Yup.string().required().label(''),
 	p1_occupation: Yup.string().required().label(''),
 	p1_relationship: Yup.string().required().label(''),
 	p1_period: Yup.string().required().label(''),
 	p2_full_name: Yup.string().required().label(''),
 	p2_address: Yup.string().required().label(''),
 	p2_phone: Yup.string().required().label(''),
-	p2_email: Yup.string().required().email().label(''),
+	p2_email: Yup.string().required().label(''),
 	p2_occupation: Yup.string().required().label(''),
 	p2_relationship: Yup.string().required().label(''),
-	p2_period: Yup.string().required().label(''),
-	*/
+	p2_period: Yup.string().required().label(''),*/
 });
 
 const StepTwo = (props) => {
@@ -794,11 +785,15 @@ return(
 );
 }
 
-const stepThreeValidationSchema = Yup.object({
-	/*email: Yup.string().required().email().label('Email'),
-	password: Yup.string().required().label('Password'),
-	university_start_date: Yup.string().required(),
-	university_finish_date: Yup.string().required(),*/
+const stepThreeValidationSchema = Yup.object().shape({
+	/*uk_document: Yup.string().required().label('document'),
+	rehab_private: Yup.string().required().label('rehab'),
+	rehab_name: Yup.string().required().label('name'),
+	rehab_print: Yup.string().required().label('print'),
+	rehab_date: Yup.string().required().label('date'),
+	ccj_detail: Yup.string().required().label('detail'),
+	iva_detail: Yup.string().required().label('detail'),
+	bankrupt_detail: Yup.string().required().label('detail'),*/
 });
 
 const StepThree = (props) => {
@@ -837,8 +832,8 @@ return(
 	</div>
 	<div className="col-md-9">
 		<p className='strong'>Rehabilitation of Offenders Act 1974</p>
-		<p>Do you have any prosecution pending or have you ever been convicted of a criminal offence which cannot, at this point in time, be considered “spent” as defined by the Rehabilitation of Offenders Act 1974? Please note that this also includes any motoring offences.?</p>
-		<p>Please give details on a separate sheet of paper which when completed should be sealed in a plain envelope and marked “Private & Confidential” and attached to this form. Please note that any information disclosed is dealt with in the strictest confidence.</p>
+		<p>Do you have any prosecution pending or have you ever been convicted of a criminal offence which cannot, at this point in time, be considered "spent" as defined by the Rehabilitation of Offenders Act 1974? Please note that this also includes any motoring offences.?</p>
+		<p>Please give details on a separate sheet of paper which when completed should be sealed in a plain envelope and marked "Private & Confidential" and attached to this form. Please note that any information disclosed is dealt with in the strictest confidence.</p>
 	</div>
 	<div className="col-md-3">
 		<FormikControl control='checkbox_toggle_switch' label='' name='rehab_eligible' />
@@ -895,11 +890,10 @@ return(
 );
 }
 
-const stepFourValidationSchema = Yup.object({
-	/*email: Yup.string().required().email().label('Email'),
-	password: Yup.string().required().label('Password'),
-	university_start_date: Yup.string().required(),
-	university_finish_date: Yup.string().required(),*/
+const stepFourValidationSchema = Yup.object().shape({
+	/*hr_name1: Yup.string().required().label('Sign'),
+	hr_name2: Yup.string().required().label('Name'),
+	hr_date: Yup.string().required().label('Date'),*/
 });
 
 const StepFour = (props) => {
@@ -1011,11 +1005,15 @@ return(
 );
 }
 
-const stepFiveValidationSchema = Yup.object({
-	/*email: Yup.string().required().email().label('Email'),
-	password: Yup.string().required().label('Password'),
-	university_start_date: Yup.string().required(),
-	university_finish_date: Yup.string().required(),*/
+const stepFiveValidationSchema = Yup.object().shape({
+	file_passport: Yup.string().required().label('Passport image'),
+	file_picture: Yup.string().required().label('Image'),
+	file_national_insurance_letter: Yup.string().required().label('Insurance image'),
+	file_proof_address: Yup.string().required().label('Address proof'),
+	file_brp1: Yup.string().required().label('BRP'),
+	file_brp2: Yup.string().required().label('BRP'),
+	file_badge1: Yup.string().required().label('Badge'),
+	file_badge2: Yup.string().required().label('Badge'),
 });
 
 const StepFive = (props) => {
@@ -1127,8 +1125,8 @@ return(
 );
 }
 
-const stepSixValidationSchema = Yup.object({
-	declaration1: Yup.boolean().oneOf([true],'Must accept.'),
+const stepSixValidationSchema = Yup.object().shape({
+	declaration1: Yup.boolean().oneOf([true],'Scroll down the above text to accept.'),
 });
 
 const StepSix = (props) => {

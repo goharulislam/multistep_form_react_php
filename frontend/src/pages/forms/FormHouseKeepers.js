@@ -494,8 +494,8 @@ return(
 );
 }
 
-const stepThreeValidationSchema = Yup.object({
-	declaration1: Yup.boolean().oneOf([true],'Must accept.'),
+const stepThreeValidationSchema = Yup.object().shape({
+	declaration1: Yup.boolean().oneOf([true],'Scroll down the above text to accept.'),
 });
 
 const StepThree = (props) => {

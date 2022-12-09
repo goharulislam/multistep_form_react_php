@@ -440,7 +440,7 @@ return(
 );
 }
 
-const stepTwoValidationSchema = Yup.object({
+const stepTwoValidationSchema = Yup.object().shape({
 	first_name2: Yup.string().required().label('Name'),
 	surname2: Yup.string().required().label('Surname'),
 	phone2: Yup.string().required().label('Last name'),
@@ -470,8 +470,6 @@ const stepTwoValidationSchema = Yup.object({
 	agency1: Yup.string().required().label('Date'),
 	sign5: Yup.string().required().label('Date'),
 	date5: Yup.string().required().label('Date'),
-	trainer_name1: Yup.string().required().label('Date'),
-	trainer_sign1: Yup.string().required().label('Date'),
 
 	changed_nationality: Yup.boolean(),
 	changed_nationality_detail: Yup.string().when('changed_nationality', {
