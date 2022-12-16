@@ -1,13 +1,13 @@
 /*https://www.youtube.com/watch?v=xAjbUJfpoz0*/
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+import axios from '../../axios/index';
 import {Formik, Form, FieldArray, ErrorMessage} from 'formik';
 import FormikControl from './assets/FormikControl';
 import * as Yup from 'yup';
 import countries from './countries';
 import marital_status from './marital_status';
 import gender from './gender';
-import axios from '../../axios/index';
 
 function FormSiaDoorSupervisor(){
 const [currentStep, setCurrentStep] = useState(0);
@@ -17,6 +17,7 @@ const navigate = useNavigate();
 
 const [data, setData] = useState({
 	function: 'create_employee',
+	uid: Math.floor(Math.random()*(9999999-100+1))+100,
 	first_name: '',
 	last_name: '',
 	home_address: '',
@@ -164,17 +165,32 @@ const [data, setData] = useState({
 });
 
 function formatDate(date){
-    var d = new Date(date),
+    let d = new Date(date),
         month = '' + (d.getMonth() + 1),
         day = '' + d.getDate(),
         year = d.getFullYear();
+		
+		/*
+		d2 = new Date(),
+		hours = d2.getHours(),
+		minutes = d2.getMinutes(),
+		seconds = d2.getSeconds(),
+		ampm = hours >= 12 ? 'pm' : 'am';
+		*/
 
     if (month.length < 2) 
         month = '0' + month;
     if (day.length < 2) 
         day = '0' + day;
 
-    return [year, month, day].join('-');
+    /*
+	let dt1 = [year, month, day, 'T'].join('-');
+	let dt2 = [hours, minutes, seconds].join(':');
+	let dt3 = dt1 + dt2 + ' ' + ampm;
+	return dt3;
+	*/
+	let dt1 = [year, month, day].join('-');
+	return dt1;
 }
 
 const makeRequest = (newData) => {
@@ -182,7 +198,10 @@ const makeRequest = (newData) => {
 //document.getElementById("whereToPrint").innerHTML = JSON.stringify(newData, null, 4);
 
 Object.keys(newData).forEach(fieldName => {
-	if(fieldName === 'date_birth' || fieldName === 'sia_badge_expiry' || fieldName === 'bank_statement_date'){
+	if(fieldName === 'uid'){
+		let d1 = 'siadoor-'+newData[fieldName];
+		formData.append(fieldName, d1);
+	} else if(fieldName === 'date_birth' || fieldName === 'sia_badge_expiry' || fieldName === 'bank_statement_date' || fieldName === 'university_start_date' || fieldName === 'university_finish_date' || fieldName === 'college_start_date' || fieldName === 'college_finish_date' || fieldName === 'school_start_date' || fieldName === 'school_finish_date'){
 		let d1 = formatDate(newData[fieldName]);
 		formData.append(fieldName, d1);
 	} else if (fieldName === 'employment_history' || fieldName === 'address_history' || fieldName === 'self_employment' || fieldName === 'gaps_employment'){

@@ -10,7 +10,7 @@ const navigate = useNavigate();
 let formData = new FormData();
 const [data, setData] = useState({
 	function: 'create_publicareacleaner',
-	uid: 'areacleaner-'+Math.floor(Math.random()*99999)+100,
+	uid: Math.floor(Math.random()*(9999999-100+1))+100,
 	title: '',
 	first_name: '',
 	last_name: '',
@@ -23,9 +23,9 @@ const [data, setData] = useState({
 	ni: '',
 	hotel: '',
 	eligible_uk: '',
-	permit_expiry: null,
+	permit_expiry: '',
 	passport: false,
-	passport_expiry: null,
+	passport_expiry: '',
 	bank: '',
 	sort_code: '',
 	account_number: '',
@@ -43,7 +43,7 @@ const [data, setData] = useState({
 	crime: false,
 	crime_detail: '',
 	sign1: '',
-	date1: null,
+	date1: '',
 	diabetes: false,
 	epilepsy: false,
 	blackouts: false,
@@ -67,7 +67,7 @@ const [data, setData] = useState({
 	alcohol: false,
 	sign2: '',
 	name2: '',
-	date2: null,
+	date2: '',
 	/*step2*/
 	first_name2: '',
 	last_name2: '',
@@ -91,32 +91,48 @@ const [data, setData] = useState({
 	address3: '',
 	hotel3: 'To be filled by Admin',
 	rate: '11',
-	payment_date: null,
+	total_room: '',
+	payment_date: '',
 	sign4: '',
-	date4: null,
+	date4: '',
 	name5: '',
 	agency: '',
 	sign5: '',
 	date5: '',
 	trainer_name: 'Vlad, Rosou',
-	trainer_sign: '',
+	trainer_sign: 'Vlad, Rosou',
 });
 
 const [currentStep, setCurrentStep] = useState(0);
 const [errors, setErrors] = useState({});
 
 function formatDate(date){
-    var d = new Date(date),
+    let d = new Date(date),
         month = '' + (d.getMonth() + 1),
         day = '' + d.getDate(),
         year = d.getFullYear();
+		
+		/*
+		d2 = new Date(),
+		hours = d2.getHours(),
+		minutes = d2.getMinutes(),
+		seconds = d2.getSeconds(),
+		ampm = hours >= 12 ? 'pm' : 'am';
+		*/
 
     if (month.length < 2) 
         month = '0' + month;
     if (day.length < 2) 
         day = '0' + day;
 
-    return [year, month, day].join('-');
+    /*
+	let dt1 = [year, month, day, 'T'].join('-');
+	let dt2 = [hours, minutes, seconds].join(':');
+	let dt3 = dt1 + dt2 + ' ' + ampm;
+	return dt3;
+	*/
+	let dt1 = [year, month, day].join('-');
+	return dt1;
 }
 
 const makeRequest = (newData) => {
@@ -124,7 +140,10 @@ const makeRequest = (newData) => {
 //document.getElementById("whereToPrint").innerHTML = JSON.stringify(newData, null, 4);
 
 Object.keys(newData).forEach(fieldName => {
-	if(fieldName === 'dob'){
+	if(fieldName === 'uid'){
+		let d1 = 'areacleaner-'+newData[fieldName];
+		formData.append(fieldName, d1);
+	} else if(fieldName === 'dob'){
 		let d1 = formatDate(newData[fieldName]);
 		formData.append(fieldName, d1);
 	} else if (fieldName === 'employment_history'){
@@ -136,12 +155,12 @@ Object.keys(newData).forEach(fieldName => {
 
 });
 
-/*
-	// V IMP CODE
-	for(var pair of formData.entries()){
-		console.log(pair[0]+ ', ' + pair[1]); 
-	}
-*/
+
+// V IMP CODE
+for(var pair of formData.entries()){
+	console.log(pair[0]+ ', ' + pair[1]); 
+}
+
 
 axios.post('api_form_publicareacleaner.php', formData);
 }
@@ -199,9 +218,8 @@ const stepOneValidationSchema = Yup.object().shape({
 	ni: Yup.string().required().label(''),
 	hotel: Yup.string().required().label(''),
 	eligible_uk: Yup.string().required().label(''),
-	permit_expiry: null,
-	passport: false,
-	passport_expiry: null,
+	permit_expiry: Yup.string().required().label(''),
+	passport_expiry: Yup.string().required().label(''),
 	bank: Yup.string().required().label(''),
 	sort_code: Yup.string().required().label(''),
 	account_number: Yup.string().required().label(''),
@@ -216,10 +234,9 @@ const stepOneValidationSchema = Yup.object().shape({
 			email: Yup.string().email().required(),
 		})
 	),
-	crime: false,
 	crime_detail: Yup.string().required().label(''),
 	sign1: Yup.string().required().label(''),
-	date1: null,
+	date1: Yup.string().required().label(''),
 	sign2: Yup.string().required().label(''),
 	name2: Yup.string().required().label(''),
 	date2: null,*/
@@ -228,15 +245,15 @@ const stepOneValidationSchema = Yup.object().shape({
 const StepOne = (props) => {
 
 const handleSubmit = (values) => {
-	console.log('p-e', Formik)
+	console.log('after submit', Formik)
 	props.next(values);
 }
 
 return(
 <Formik initialValues={props.data} validationSchema={stepOneValidationSchema} onSubmit={handleSubmit}>
 {formik => {
-	console.log('formik', formik)
-	return(
+console.log('formik', formik)
+return(
 <Form>
 <h4>Application Information</h4>
 <div className="row">
@@ -454,7 +471,6 @@ const stepTwoValidationSchema = Yup.object().shape({
 	start_date1: Yup.string().required().label('Start date'),
 	start_time1: Yup.string().required().label('Start time'),
 	medical: Yup.string().required().label('Medical'),
-	pregnant: false,
 	emergency_name: Yup.string().required().label('Name'),
 	emergency_phone: Yup.string().required().label('Phone'),
 	emergency_address: Yup.string().required().label('Address'),
@@ -462,7 +478,7 @@ const stepTwoValidationSchema = Yup.object().shape({
 	date3: Yup.string().required().label('Date'),
 	name3: Yup.string().required().label('Name'),
 	address3: Yup.string().required().label('Address'),
-	rate: '11',
+	total_room: Yup.string().required().label('Total room(s)'),
 	payment_date: Yup.string().required().label('Date'),
 	sign4: Yup.string().required().label('Sign'),
 	date4: Yup.string().required().label('Title'),
@@ -540,7 +556,7 @@ return(
 		<FormikControl control='input' type='text' label='Signature' name='sign3' />
 	</div>
 	<div className="col-md-4">
-		<FormikControl control='input' type='text' label='Date' name='date3' />
+		<FormikControl control='date' label='Date' name='date3' />
 	</div>
 	<div className="col-md-12">
 		<h4>Payment Terms for H&D Staff</h4>
@@ -558,7 +574,7 @@ return(
 		<FormikControl control='input' type='text' label='Hourly rate' name='rate' disabled />
 	</div>
 	<div className="col-md-12">
-		<FormikControl control='input' type='text' label='This is conditional on at least 2 rooms cleaned in one hour.' name='total_rooms' />
+		<FormikControl control='input' type='text' label='This is conditional on at least 2 rooms cleaned in one hour.' name='total_room' />
 		<p>With a total of up _____ rooms cleaned in an 8-hour shift. You will also clean the corridors as and when required by the supervisors.</p>
 	</div>
 	<div className="col-md-6">
@@ -609,7 +625,7 @@ return(
 		<FormikControl control='input' type='text' label='Signature' name='sign5' />
 	</div>
 	<div className="col-md-4">
-		<FormikControl control='input' type='text' label='Date' name='date5' />
+		<FormikControl control='date' label='Date' name='date5' />
 	</div>
 	<div className="col-md-4">
 		<FormikControl control='input' type='text' label="Trainer's Name" name='trainer_name' disabled />

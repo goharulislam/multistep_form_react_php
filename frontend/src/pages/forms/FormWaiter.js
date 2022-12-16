@@ -12,6 +12,7 @@ let formData = new FormData();
 const navigate = useNavigate();
 const [data, setData] = useState({
 	function: 'create_employee',
+	uid: Math.floor(Math.random()*(9999999-100+1))+100,
 	title: '',
 	first_name1: '',
 	last_name1: '',
@@ -102,6 +103,7 @@ const [data, setData] = useState({
 	eligible_uk2: false,
 	select_document: '',
 	rehab_eligible: false,
+	rehab_private: '',
 	rehab_confirm: false,
 	rehab_understand: false,
 	rehab_sign: '',
@@ -129,25 +131,43 @@ const [data, setData] = useState({
 });
 
 function formatDate(date){
-    var d = new Date(date),
+    let d = new Date(date),
         month = '' + (d.getMonth() + 1),
         day = '' + d.getDate(),
         year = d.getFullYear();
+		
+		/*
+		d2 = new Date(),
+		hours = d2.getHours(),
+		minutes = d2.getMinutes(),
+		seconds = d2.getSeconds(),
+		ampm = hours >= 12 ? 'pm' : 'am';
+		*/
 
     if (month.length < 2) 
         month = '0' + month;
     if (day.length < 2) 
         day = '0' + day;
 
-    return [year, month, day].join('-');
+    /*
+	let dt1 = [year, month, day, 'T'].join('-');
+	let dt2 = [hours, minutes, seconds].join(':');
+	let dt3 = dt1 + dt2 + ' ' + ampm;
+	return dt3;
+	*/
+	let dt1 = [year, month, day].join('-');
+	return dt1;
 }
 
 const makeRequest = (newData) => {
 //console.log('form submitted', newData);
-//document.getElementById("whereToPrint").innerHTML = JSON.stringify(newData, '', 4);
+//document.getElementById("whereToPrint").innerHTML = JSON.stringify(newData, null, 4);
 
 Object.keys(newData).forEach(fieldName => {
-	if(fieldName === 'request_date1'){
+	if(fieldName === 'uid'){
+		let d1 = 'waiter-'+newData[fieldName];
+		formData.append(fieldName, d1);
+	} else if(fieldName === 'request_date1'){
 		let d1 = formatDate(newData[fieldName]);
 		formData.append(fieldName, d1);
 	} else if (fieldName === 'employment_history'){
@@ -174,7 +194,6 @@ const handleNextStep = (newData, final = false) => {
 		window.scrollTo(0, 0);
 		//document.body.scrollTop = 0;
 		//window.scrollBy(0, 0);
-		console.log('INSIDE');
 	}
 	setData((prev) => ({...prev, ...newData}));
 	if(final){
@@ -655,10 +674,10 @@ const handleSubmit = (values) => {
 }
 
 const dropdownDocuments = [
-	{key:'', value:'Select a document'},
+	{key:'', value:'Select document'},
 	{key:'Passport', value:'Passport'},
-	{key:'Birth Certificate', value:'Birth Certificate'},
-	{key:'EU ID Card', value:'EU ID Card'},
+	{key:'BirthCertificate', value:'Birth Certificate'},
+	{key:'EUIDCard', value:'EU ID Card'},
 	{key:'Visa', value:'Visa'}
 ];
 
@@ -675,7 +694,7 @@ return(
 	</div>
 	<div className="col-md-9" style={{display: formik.values.eligible_uk2 ? 'block' : 'none' }}>
 		<p>Please state what documentation you can provide in order to demonstrate this</p>
-		<p className='small'>(e.g. Passport/ Birth Certificate/ EU ID Card/ Visa)</p>
+		<p className='small'>(e.g. Passport/Birth Certificate/EU ID Card/Visa)</p>
 	</div>
 	<div className="col-md-3" style={{display: formik.values.eligible_uk2 ? 'block' : 'none' }}>
 		<FormikControl className='float-end' control='select' label='' name='select_document' options={dropdownDocuments} />

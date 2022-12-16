@@ -11,6 +11,7 @@ import FormPublicAreaCleaner from '../pages/forms/FormPublicAreaCleaner';
 import FormPorter from '../pages/forms/FormPorter';
 import FormLinenPorter from '../pages/forms/FormLinenPorter';
 import FormHouseKeepers from '../pages/forms/FormHouseKeepers';
+import Contact1 from '../pages/Contact1';
 import NoMatch from '../pages/NoMatch';
 function Router(){
   return(
@@ -30,6 +31,7 @@ function Router(){
 			<Route path="/admin" element={<Admin />} />
 			<Route path="/downloadcsv" element={<DownloadCSV />} />
 			<Route path="/csvsiadoorsupervisor" element={<SiaDoorSupervisor />} />
+			<Route path="/contact" element={<Contact1 />} />
 			<Route path="*" element={<NoMatch />} />
 		</Routes>
 	</div>

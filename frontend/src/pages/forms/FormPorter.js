@@ -9,7 +9,7 @@ const navigate = useNavigate();
 let formData = new FormData();
 const [data, setData] = useState({
 	function: 'create_porter',
-	uid: 'porter-'+Math.floor(Math.random()*99999)+100,
+	uid: Math.floor(Math.random()*(9999999-100+1))+100,
 	title: '',
 	first_name1: '',
 	last_name1: '',
@@ -18,13 +18,13 @@ const [data, setData] = useState({
 	home_address1: '',
 	post_code1: '',
 	work_sought: 'Porter',
-	dob1: null,
+	dob1: '',
 	ni_number: '',
 	hotel1: '',
 	eligible_uk: false,
-	permit_expiry: null,
+	permit_expiry: '',
 	passport: false,
-	passport_expiry: null,
+	passport_expiry: '',
 	bank_name: '',
 	sort_code: '',
 	account_number: '',
@@ -66,7 +66,7 @@ const [data, setData] = useState({
 	alcohol: false,
 	sign2: '',
 	name2: '',
-	date2: null,
+	date2: '',
 	/*step2*/
 	first_name2: '',
 	surname2: '',
@@ -74,8 +74,8 @@ const [data, setData] = useState({
 	home_address2: '',
 	hotel2: '',
 	report_to1: '',
-	start_date1: null,
-	start_time1: null,
+	start_date1: '',
+	start_time1: '',
 	job_role2: 'Porter',
 	hourly_rate2: '11',
 	dress1: 'BLACK POLO SHIRT, BLACK TROUSER, BLCAK SHOES',
@@ -85,37 +85,52 @@ const [data, setData] = useState({
 	emergency_number1: '',
 	emergency_address1: '',
 	sign3: '',
-	date3: null,
+	date3: '',
 	name3: '',
 	address3: '',
 	hotel3: 'To be filled by Admin',
 	rate: '11',
-	payment_date: null,
+	payment_date: '',
 	sign4: '',
-	date4: null,
+	date4: '',
 	name5: '',
 	agency1: 'H&D Recruitment',
 	sign5: '',
-	date5: null,
+	date5: '',
 	trainer_name1: 'Vlad, Rosou',
-	trainer_sign1: '',
+	trainer_sign1: 'Vlad, Rosou',
 });
 
 const [currentStep, setCurrentStep] = useState(0);
 const [errors, setErrors] = useState({});
 
 function formatDate(date){
-    var d = new Date(date),
+    let d = new Date(date),
         month = '' + (d.getMonth() + 1),
         day = '' + d.getDate(),
         year = d.getFullYear();
+		
+		/*
+		d2 = new Date(),
+		hours = d2.getHours(),
+		minutes = d2.getMinutes(),
+		seconds = d2.getSeconds(),
+		ampm = hours >= 12 ? 'pm' : 'am';
+		*/
 
     if (month.length < 2) 
         month = '0' + month;
     if (day.length < 2) 
         day = '0' + day;
 
-    return [year, month, day].join('-');
+    /*
+	let dt1 = [year, month, day, 'T'].join('-');
+	let dt2 = [hours, minutes, seconds].join(':');
+	let dt3 = dt1 + dt2 + ' ' + ampm;
+	return dt3;
+	*/
+	let dt1 = [year, month, day].join('-');
+	return dt1;
 }
 
 const makeRequest = (newData) => {
@@ -123,7 +138,10 @@ const makeRequest = (newData) => {
 //document.getElementById("whereToPrint").innerHTML = JSON.stringify(newData, null, 4);
 
 Object.keys(newData).forEach(fieldName => {
-	if(fieldName === 'dob1'){
+	if(fieldName === 'uid'){
+		let d1 = 'porter-'+newData[fieldName];
+		formData.append(fieldName, d1);
+	} else if(fieldName === 'dob1' || fieldName === 'permit_expiry' || fieldName === 'passport_expiry' || fieldName === 'date1' || fieldName === 'date2' || fieldName === 'start_date1' || fieldName === 'date3' || fieldName === 'start_date1' || fieldName === 'payment_date' || fieldName === 'date4' || fieldName === 'date5'){
 		let d1 = formatDate(newData[fieldName]);
 		formData.append(fieldName, d1);
 	} else if (fieldName === 'employment_history'){
@@ -333,7 +351,7 @@ return(
 		<div className="col-md-12">
 			<FormikControl control='checkbox_toggle_switch' label='Do you have any unspent criminal convictions?' name='crime' />
 		</div>
-		<div className="col-md-12">
+		<div className="col-md-12" style={{display: formik.values.crime ? 'block' : 'none'}}>
 			<FormikControl control='input' type='text' label='Detail' name='crime_detail' placeholder='Detail' />
 		</div>
 		<div className="col-md-12">

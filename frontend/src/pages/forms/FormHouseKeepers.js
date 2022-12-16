@@ -10,7 +10,7 @@ const navigate = useNavigate();
 let formData = new FormData();
 const [data, setData] = useState({
 	function: 'create_housekeepers',
-	uid: 'housekeepers-'+Math.floor(Math.random()*99999)+100,
+	uid: Math.floor(Math.random()*(9999999-100+1))+100,
 	title: '',
 	first_name: '',
 	last_name: '',
@@ -43,7 +43,7 @@ const [data, setData] = useState({
 		},
 	],
 	crime: false,
-	crime_date: null,
+	crime_date: '',
 	crime_detail: '',
 	name2: '',
 	sign2: '',
@@ -83,17 +83,32 @@ const [currentStep, setCurrentStep] = useState(0);
 const [errors, setErrors] = useState({});
 
 function formatDate(date){
-    var d = new Date(date),
+    let d = new Date(date),
         month = '' + (d.getMonth() + 1),
         day = '' + d.getDate(),
         year = d.getFullYear();
+		
+		/*
+		d2 = new Date(),
+		hours = d2.getHours(),
+		minutes = d2.getMinutes(),
+		seconds = d2.getSeconds(),
+		ampm = hours >= 12 ? 'pm' : 'am';
+		*/
 
     if (month.length < 2) 
         month = '0' + month;
     if (day.length < 2) 
         day = '0' + day;
 
-    return [year, month, day].join('-');
+    /*
+	let dt1 = [year, month, day, 'T'].join('-');
+	let dt2 = [hours, minutes, seconds].join(':');
+	let dt3 = dt1 + dt2 + ' ' + ampm;
+	return dt3;
+	*/
+	let dt1 = [year, month, day].join('-');
+	return dt1;
 }
 
 const makeRequest = (newData) => {
@@ -101,7 +116,10 @@ const makeRequest = (newData) => {
 //document.getElementById("whereToPrint").innerHTML = JSON.stringify(newData, null, 4);
 
 Object.keys(newData).forEach(fieldName => {
-	if(fieldName === 'dob'){
+	if(fieldName === 'uid'){
+		let d1 = 'housekeepers-'+newData[fieldName];
+		formData.append(fieldName, d1);
+	} else if(fieldName === 'dob'){
 		let d1 = formatDate(newData[fieldName]);
 		formData.append(fieldName, d1);
 	} else if(fieldName === 'employment_history'){
@@ -110,7 +128,6 @@ Object.keys(newData).forEach(fieldName => {
 		//console.log(fieldName, newData[fieldName]);
 		formData.append(fieldName, newData[fieldName]);
 	}
-
 });
 
 /*
