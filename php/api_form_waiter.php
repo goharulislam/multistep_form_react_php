@@ -22,12 +22,11 @@ if($function != ""){
             create_employee($cn, $a, $b);
         break;
         default:
-        echo "Default";
+            echo "Default";
     }
 }
 
 function create_employee($cn, $a, $b){
-$uid = "waiter-".rand(9999,1000000);
 $server_url = "https://handdservices.co.uk/";
 $upload_dir = "images_employees/";
 
@@ -40,7 +39,7 @@ for($i=0; $i < $c; $i++){
     try{
         $sql = "INSERT INTO waiter_employment_history (uid, company_name, phone, email) VALUES (:uid, :company_name, :phone, :email)";
         $stmt = $cn->prepare($sql);
-        $stmt->bindParam(':uid', $uid);
+        $stmt->bindParam(':uid', $a['uid']);
         $stmt->bindParam(':company_name', $data[$i]["company_name"]);
         $stmt->bindParam(':phone', $data[$i]['phone']);
         $stmt->bindParam(':email', $data[$i]['email']);
@@ -311,10 +310,10 @@ if($b['file_brp2']){
 echo json_encode($response);/*file_brp2*/
 
 try{
-$sql = "INSERT INTO form_waiter (uid, title, first_name1, last_name1, phone1, email1, home_address1, post_code1, work_sought, hotel, eligible_uk, permit_expiry, passport, passport_expiry, bank_name, sort_code, account_number, emergency_contact_name, emergency_contact_relation, emergency_contact_number, emergency_contact_address, crime, crime_detail, sign1, date1, diabetes, epilepsy, blackouts, discomfort, moving, looking, outdoor, enclosed1, head_height, eyesight, lifting, accident, back, feet, hernia, bp, heart, hearing, dizziness, drugs, alcohol, sign2, name2, date2, first_name2, surname2, home_address2, hotel2, report_to1, start_date1, start_time1, job_role2, hourly_rate2, dress1, medical1, pregnant, emergency_name1, emergency_number1, emergency_address1, sign3, date3, name3, address3, hotel3, rate, payment_date, sign4, date4, name5, agency1, sign5, date5, trainer_name1, trainer_sign1, eligible_uk2, select_document, rehab_eligible, rehab_confirm, rehab_understand, rehab_sign, rehab_print, rehab_date, ccj, ccj_detail, iva, iva_detail, bankcrupt, bankcrupt_detail, request_ni_number, request_date1, request_current_address, request_previous_address, file_passport, file_picture, file_national_insurance_letter, file_proof_address, file_brp1, file_brp2, declaration1) VALUES (:uid, :title, :first_name1, :last_name1, :phone1, :email1, :home_address1, :post_code1, :work_sought, :hotel, :eligible_uk, :permit_expiry, :passport, :passport_expiry, :bank_name, :sort_code, :account_number, :emergency_contact_name, :emergency_contact_relation, :emergency_contact_number, :emergency_contact_address, :crime, :crime_detail, :sign1, :date1, :diabetes, :epilepsy, :blackouts, :discomfort, :moving, :looking, :outdoor, :enclosed1, :head_height, :eyesight, :lifting, :accident, :back, :feet, :hernia, :bp, :heart, :hearing, :dizziness, :drugs, :alcohol, :sign2, :name2, :date2, :first_name2, :surname2, :home_address2, :hotel2, :report_to1, :start_date1, :start_time1, :job_role2, :hourly_rate2, :dress1, :medical1, :pregnant, :emergency_name1, :emergency_number1, :emergency_address1, :sign3, :date3, :name3, :address3, :hotel3, :rate, :payment_date, :sign4, :date4, :name5, :agency1, :sign5, :date5, :trainer_name1, :trainer_sign1, :eligible_uk2, :select_document, :rehab_eligible, :rehab_confirm, :rehab_understand, :rehab_sign, :rehab_print, :rehab_date, :ccj, :ccj_detail, :iva, :iva_detail, :bankcrupt, :bankcrupt_detail, :request_ni_number, :request_date1, :request_current_address, :request_previous_address, :file_passport, :file_picture, :file_national_insurance_letter, :file_proof_address, :file_brp1, :file_brp2, :declaration1)";
+$sql = "INSERT INTO form_waiter (uid, title, first_name1, last_name1, phone1, email1, home_address1, post_code1, work_sought, hotel, eligible_uk, permit_expiry, passport, passport_expiry, bank_name, sort_code, account_number, emergency_contact_name, emergency_contact_relation, emergency_contact_number, emergency_contact_address, crime, crime_detail, sign1, date1, diabetes, epilepsy, blackouts, discomfort, moving, looking, outdoor, enclosed1, head_height, eyesight, lifting, accident, back, feet, hernia, bp, heart, hearing, dizziness, drugs, alcohol, sign2, name2, date2, first_name2, surname2, home_address2, hotel2, report_to1, start_date1, start_time1, job_role2, hourly_rate2, dress1, medical1, pregnant, emergency_name1, emergency_number1, emergency_address1, sign3, date3, name3, address3, hotel3, rate, payment_date, sign4, date4, name5, agency1, sign5, date5, trainer_name1, trainer_sign1, eligible_uk2, select_document, rehab_eligible, rehab_private, rehab_confirm, rehab_understand, rehab_sign, rehab_print, rehab_date, ccj, ccj_detail, iva, iva_detail, bankcrupt, bankcrupt_detail, request_ni_number, request_date1, request_current_address, request_previous_address, file_passport, file_picture, file_national_insurance_letter, file_proof_address, file_brp1, file_brp2, declaration1) VALUES (:uid, :title, :first_name1, :last_name1, :phone1, :email1, :home_address1, :post_code1, :work_sought, :hotel, :eligible_uk, :permit_expiry, :passport, :passport_expiry, :bank_name, :sort_code, :account_number, :emergency_contact_name, :emergency_contact_relation, :emergency_contact_number, :emergency_contact_address, :crime, :crime_detail, :sign1, :date1, :diabetes, :epilepsy, :blackouts, :discomfort, :moving, :looking, :outdoor, :enclosed1, :head_height, :eyesight, :lifting, :accident, :back, :feet, :hernia, :bp, :heart, :hearing, :dizziness, :drugs, :alcohol, :sign2, :name2, :date2, :first_name2, :surname2, :home_address2, :hotel2, :report_to1, :start_date1, :start_time1, :job_role2, :hourly_rate2, :dress1, :medical1, :pregnant, :emergency_name1, :emergency_number1, :emergency_address1, :sign3, :date3, :name3, :address3, :hotel3, :rate, :payment_date, :sign4, :date4, :name5, :agency1, :sign5, :date5, :trainer_name1, :trainer_sign1, :eligible_uk2, :select_document, :rehab_eligible, :rehab_private, :rehab_confirm, :rehab_understand, :rehab_sign, :rehab_print, :rehab_date, :ccj, :ccj_detail, :iva, :iva_detail, :bankcrupt, :bankcrupt_detail, :request_ni_number, :request_date1, :request_current_address, :request_previous_address, :file_passport, :file_picture, :file_national_insurance_letter, :file_proof_address, :file_brp1, :file_brp2, :declaration1)";
 //echo "sql: ".$sql;
 $stmt = $cn->prepare($sql);
-$stmt->bindParam(':uid', $uid);
+$stmt->bindParam(':uid', $a['uid']);
 $stmt->bindParam(':title', $a['title']);
 $stmt->bindParam(':first_name1', $a['first_name1']);
 $stmt->bindParam(':last_name1', $a['last_name1']);
@@ -396,6 +395,7 @@ $stmt->bindParam(':trainer_sign1', $a['trainer_sign1']);
 $stmt->bindParam(':eligible_uk2', $a['eligible_uk2']);
 $stmt->bindParam(':select_document', $a['select_document']);
 $stmt->bindParam(':rehab_eligible', $a['rehab_eligible']);
+$stmt->bindParam(':rehab_private', $a['rehab_private']);
 $stmt->bindParam(':rehab_confirm', $a['rehab_confirm']);
 $stmt->bindParam(':rehab_understand', $a['rehab_understand']);
 $stmt->bindParam(':rehab_sign', $a['rehab_sign']);

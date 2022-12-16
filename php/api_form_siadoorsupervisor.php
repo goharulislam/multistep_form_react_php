@@ -67,7 +67,6 @@ function get_six($cn){
 }
 
 function create_employee($cn, $a, $b){
-$uid = "door-".rand(9999,1000000);
 $server_url = "https://handdservices.co.uk/";
 $upload_dir = "images_employees/";
 
@@ -80,7 +79,7 @@ for($i=0; $i < $c; $i++){
     try{
         $sql = "INSERT INTO sia_door_supervisor_employment_history (uid, company_name, job_title, job_started, job_finished, address, phone, email, reason_leaving, contact_employer) VALUES (:uid, :company_name, :job_title, :job_started, :job_finished, :address, :phone, :email, :reason_leaving, :contact_employer)";
         $stmt = $cn->prepare($sql);
-        $stmt->bindParam(':uid', $uid);
+        $stmt->bindParam(':uid', $a['uid']);
         $stmt->bindParam(':company_name', $data[$i]["company_name"]);
         $stmt->bindParam(':job_title', $data[$i]['job_title']);
         $stmt->bindParam(':job_started', $data[$i]['job_started']);
@@ -107,7 +106,7 @@ for($i=0; $i < $c; $i++){
     try{
         $sql = "INSERT INTO sia_door_supervisor_gaps_employment (uid, reason, start_date, end_date) VALUES (:uid, :reason, :start_date, :end_date)";
         $stmt = $cn->prepare($sql);
-        $stmt->bindParam(':uid', $uid);
+        $stmt->bindParam(':uid', $a['uid']);
         $stmt->bindParam(':reason', $data[$i]["reason"]);
         $stmt->bindParam(':start_date', $data[$i]['start_date']);
         $stmt->bindParam(':end_date', $data[$i]['end_date']);
@@ -128,7 +127,7 @@ if($a['address_history']){
         try{
             $sql = "INSERT INTO sia_door_supervisor_address_history (uid, previous_address, date_moved_in, date_leaved_out) VALUES (:uid, :previous_address, :date_moved_in, :date_leaved_out)";
             $stmt = $cn->prepare($sql);
-            $stmt->bindParam(':uid', $uid);
+            $stmt->bindParam(':uid', $a['uid']);
             $stmt->bindParam(':previous_address', $data[$i]["previous_address"]);
             $stmt->bindParam(':date_moved_in', $data[$i]['date_moved_in']);
             $stmt->bindParam(':date_leaved_out', $data[$i]['date_leaved_out']);
@@ -149,7 +148,7 @@ if($a['self_employment']){
         try{
             $sql = "INSERT INTO sia_door_supervisor_self_employment (uid, company_name, company_address, company_phone, company_email) VALUES (:uid, :company_name, :company_address, :company_phone, :company_email)";
             $stmt = $cn->prepare($sql);
-            $stmt->bindParam(':uid', $uid);
+            $stmt->bindParam(':uid', $a['uid']);
             $stmt->bindParam(':company_name', $data[$i]["company_name"]);
             $stmt->bindParam(':company_address', $data[$i]['company_address']);
             $stmt->bindParam(':company_phone', $data[$i]['company_phone']);
@@ -510,7 +509,7 @@ try{
 $sql = "INSERT INTO form_sia_door_supervisor (uid, first_name, last_name, home_address, postal_code, region, city, phone, email, gender, marital_status, date_birth, place_birth, country_birth, sia_license, sia_badge_number, sia_badge_expiry, bank_name, bank_account_number, sort_code, bank_statement_date, valid_passport, uk_full_time, brp, criminal_convictions, international_student, own_vehicle, driving_license, driving_license_number, driving_endorsements, kin_name, kin_phone, kin_email, kin_address, kin_relationship, university_address, university_start_date, university_finish_date, college_address, college_start_date, college_finish_date, school_address, school_start_date, school_finish_date, changed_nationality, changed_nationality_detail, changed_surname, changed_surname_detail, current_address, current_address_date, p1_full_name, p1_address, p1_phone, p1_email, p1_occupation, p1_relationship, p1_period, p2_full_name, p2_address, p2_phone, p2_email, p2_occupation, p2_relationship, p2_period, eligible_uk, uk_document, rehab_eligible, rehab_private, rehab_confirm, rehab_understand, rehab_name, rehab_print, rehab_date, ccj, ccj_detail, iva, iva_detail, bankrupt, bankrupt_detail, diabetes, epilepsy, blackouts, discomfort, moving, looking, outdoor, enclosed1, head_height, eyesight, lifting, accident, back, feet, hernia, bp, heart, hearing, dizziness, drugs, alcohol, hr_name1, hr_name2, hr_date, file_passport, file_picture, file_national_insurance_letter, file_proof_address, file_brp1, file_brp2, file_badge1, file_badge2, declaration1) VALUES (:uid, :first_name, :last_name, :home_address, :postal_code, :region, :city, :phone, :email, :gender, :marital_status, :date_birth, :place_birth, :country_birth, :sia_license, :sia_badge_number, :sia_badge_expiry, :bank_name, :bank_account_number, :sort_code, :bank_statement_date, :valid_passport, :uk_full_time, :brp, :criminal_convictions, :international_student, :own_vehicle, :driving_license, :driving_license_number, :driving_endorsements, :kin_name, :kin_phone, :kin_email, :kin_address, :kin_relationship, :university_address, :university_start_date, :university_finish_date, :college_address, :college_start_date, :college_finish_date, :school_address, :school_start_date, :school_finish_date, :changed_nationality, :changed_nationality_detail, :changed_surname, :changed_surname_detail, :current_address, :current_address_date, :p1_full_name, :p1_address, :p1_phone, :p1_email, :p1_occupation, :p1_relationship, :p1_period, :p2_full_name, :p2_address, :p2_phone, :p2_email, :p2_occupation, :p2_relationship, :p2_period, :eligible_uk, :uk_document, :rehab_eligible, :rehab_private, :rehab_confirm, :rehab_understand, :rehab_name, :rehab_print, :rehab_date, :ccj, :ccj_detail, :iva, :iva_detail, :bankrupt, :bankrupt_detail, :diabetes, :epilepsy, :blackouts, :discomfort, :moving, :looking, :outdoor, :enclosed1, :head_height, :eyesight, :lifting, :accident, :back, :feet, :hernia, :bp, :heart, :hearing, :dizziness, :drugs, :alcohol, :hr_name1, :hr_name2, :hr_date, :file_passport, :file_picture, :file_national_insurance_letter, :file_proof_address, :file_brp1, :file_brp2, :file_badge1, :file_badge2, :declaration1)";
 //echo "sql: ".$sql;
 $stmt = $cn->prepare($sql);
-$stmt->bindParam(':uid', $uid);
+$stmt->bindParam(':uid', $a['uid']);
 $stmt->bindParam(':first_name', $a['first_name']);
 $stmt->bindParam(':last_name', $a['last_name']);
 $stmt->bindParam(':home_address', $a['home_address']);
