@@ -201,7 +201,7 @@ Object.keys(newData).forEach(fieldName => {
 	if(fieldName === 'uid'){
 		let d1 = 'siadoor-'+newData[fieldName];
 		formData.append(fieldName, d1);
-	} else if(fieldName === 'date_birth' || fieldName === 'sia_badge_expiry' || fieldName === 'bank_statement_date' || fieldName === 'university_start_date' || fieldName === 'university_finish_date' || fieldName === 'college_start_date' || fieldName === 'college_finish_date' || fieldName === 'school_start_date' || fieldName === 'school_finish_date'){
+	} else if(fieldName === 'date_birth' || fieldName === 'sia_badge_expiry' || fieldName === 'bank_statement_date' || fieldName === 'university_start_date' || fieldName === 'university_finish_date' || fieldName === 'college_start_date' || fieldName === 'college_finish_date' || fieldName === 'school_start_date' || fieldName === 'school_finish_date' || fieldName === 'current_address_date' || fieldName === 'rehab_date' || fieldName === 'hr_date'){
 		let d1 = formatDate(newData[fieldName]);
 		formData.append(fieldName, d1);
 	} else if (fieldName === 'employment_history' || fieldName === 'address_history' || fieldName === 'self_employment' || fieldName === 'gaps_employment'){

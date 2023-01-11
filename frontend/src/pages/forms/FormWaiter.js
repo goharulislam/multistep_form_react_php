@@ -167,7 +167,7 @@ Object.keys(newData).forEach(fieldName => {
 	if(fieldName === 'uid'){
 		let d1 = 'waiter-'+newData[fieldName];
 		formData.append(fieldName, d1);
-	} else if(fieldName === 'request_date1'){
+	} else if(fieldName === 'request_date1' || fieldName === 'permit_expiry' || fieldName === 'passport_expiry' || fieldName === 'date1' || fieldName === 'date2' || fieldName === 'start_date1' || fieldName === 'date3' || fieldName === 'payment_date' || fieldName === 'date4' || fieldName === 'date5' || fieldName === 'rehab_date' || fieldName === 'request_date1'){
 		let d1 = formatDate(newData[fieldName]);
 		formData.append(fieldName, d1);
 	} else if (fieldName === 'employment_history'){
